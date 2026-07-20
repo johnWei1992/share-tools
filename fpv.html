@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛸 GEEK6S 3D SIMULATOR - 强聚焦完美控制版</title>
+    <!-- 引入轻量级 3D 引擎 Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --bitly-blue: #0c66ff;
+            --bitly-dark: #111827;
+            --bg-main: #f4f6f9;
+            --border-light: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: #374151;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header-nav {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--bitly-dark);
+        }
+
+        .brand-logo span {
+            color: #00d26a;
+        }
+
+        .back-link {
+            text-decoration: none;
+            font-size: 14px;
+            color: var(--bitly-blue);
+            font-weight: 500;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto 20px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .game-card {
+            background: #000000;
+            border-radius: 12px;
+            height: 450px;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            /* 去除聚焦时的外边框 */
+        }
+
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .menu-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 10;
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .game-subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .btn-action {
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-start {
+            background: var(--bitly-blue);
+        }
+
+        .btn-start:hover {
+            background: #004ecc;
+        }
+
+        /* 十字操控面板 */
+        .control-panel {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-dir {
+            width: 30%;
+            max-width: 150px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #475569;
+            user-select: none;
+        }
+
+        .btn-dir:active {
+            background: #1e293b;
+        }
+
+        .hud-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #00ffcc;
+            font-family: monospace;
+            font-size: 16px;
+            text-align: left;
+            pointer-events: none;
+            display: none;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .countdown-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ffcc;
+            font-size: 80px;
+            font-weight: 900;
+            font-family: monospace;
+            pointer-events: none;
+            display: none;
+            z-index: 20;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+        }
+
+        .linkage-hint {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #166534;
+            text-align: left;
+        }
+
+        .btn-share {
+            background: #334155;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-nav">
+        <a href="index.html" class="brand-logo">🛸 GEEK<span>6S</span> 3D WIDE</a>
+        <a href="index.html" class="back-link">返回极客工具箱 ➔</a>
+    </div>
+
+    <div class="game-container">
+        <!-- tabindex保证可以使用边缘物理聚焦 -->
+        <div class="game-card" id="stage-box" tabindex="1">
+            <div id="canvas3d"></div>
+            <div class="hud-display" id="hud">
+                <div>ALT: <span id="hud-alt">0.0</span>m</div>
+                <div>TWR: <span id="hud-twr">6.0</span>:1</div>
+                <div>SCORE: <span id="hud-score">0</span>m</div>
+            </div>
+            <div class="countdown-overlay" id="countdown">3</div>
+            <div class="menu-view" id="menu-view">
+                <div class="game-title" id="m-title">🛸 6S 3D 动态曲折隧道模拟器</div>
+                <div class="game-subtitle" id="physics-status">正在读取计算器核心推演参数...</div>
+                <button class="btn-action btn-start" onclick="startPreFlight()">⚡ 3D 模式安全起飞</button>
+            </div>
+        </div>
+
+        <!-- 操控区 -->
+        <div class="control-panel">
+            <div class="row">
+                <button class="btn-dir" id="btn-up">▲ 爬升(↑)</button>
+            </div>
+            <div class="row">
+                <button class="btn-dir" id="btn-left">◀ 左移(←)</button>
+                <button class="btn-dir" id="btn-right">右移(→) ▶</button>
+            </div>
+            <div class="row">
+                <button class="btn-dir" id="btn-down">▼ 俯冲(↓)</button>
+            </div>
+        </div>
+
+        <div class="linkage-hint">
+            <strong>⚙️ 3D 连续弯道操控指引：</strong><br>
+            <span id="linkage-text">已全面升级全局键盘映射。若无反应，请确保未开启中文输入法。</span>
+            <button class="btn-share" id="share-btn" style="display:none;" onclick="copyMyScore()">📋
+                一键复制硬核战绩破圈</button>
+        </div>
+    </div>
+
+    <script>
+        let scene, camera, renderer, droneGroup;
+        let tunnelRings = [];
+        let gameActive = false;
+        let flyDistance = 0;
+        let twr = 6.0;
+        let moveSens = 0.6;
+        let speedZ = 2.2;
+        let globalRingCount = 0;
+
+        // 全局按键映射状态字典
+        let keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+        function refreshTwrData() {
+            try {
+                const savedTwr = localStorage.getItem('fpv_twr');
+                if (savedTwr && !isNaN(parseFloat(savedTwr))) {
+                    twr = parseFloat(savedTwr);
+                }
+            } catch (e) { }
+            document.getElementById('physics-status').innerText = `已同步6S动力箱：当前立体物理推重比为 ${twr.toFixed(1)}:1`;
+            moveSens = twr >= 8.0 ? 0.95 : (twr < 4.0 ? 0.40 : 0.65);
+        }
+        refreshTwrData();
+
+        // 【核心修复】绑定至顶级 window 窗口，彻底解决局部不响应焦点的问题
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(e.code)) {
+                e.preventDefault(); // 阻止方向键滚网页
+
+                // 同时兼容标准方向键与 WASD
+                if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.ArrowUp = true;
+                if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.ArrowDown = true;
+                if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.ArrowLeft = true;
+                if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.ArrowRight = true;
+            }
+        }, { passive: false });
+
+        window.addEventListener('keyup', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(e.code)) {
+                e.preventDefault();
+
+                if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.ArrowUp = false;
+                if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.ArrowDown = false;
+                if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.ArrowLeft = false;
+                if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.ArrowRight = false;
+            }
+        }, { passive: false });
+
+        // 移动端/鼠标模拟控制
+        const bindBtn = (id, keyName) => {
+            const btn = document.getElementById(id);
+            btn.addEventListener('mousedown', (e) => { e.preventDefault(); keys[keyName] = true; });
+            btn.addEventListener('mouseup', () => keys[keyName] = false);
+            btn.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; });
+            btn.addEventListener('touchend', () => keys[keyName] = false);
+        };
+        bindBtn('btn-up', 'ArrowUp');
+        bindBtn('btn-down', 'ArrowDown');
+        bindBtn('btn-left', 'ArrowLeft');
+        bindBtn('btn-right', 'ArrowRight');
+
+        function startPreFlight() {
+            refreshTwrData();
+
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('canvas3d').style.display = 'block';
+            document.getElementById('hud').style.display = 'block';
+            document.getElementById('share-btn').style.display = 'none';
+
+            // 【核心修复】起飞时代码强制聚焦，防止键盘事件失焦
+            setTimeout(() => {
+                const sb = document.getElementById('stage-box');
+                if (sb) sb.focus();
+            }, 50);
+
+            flyDistance = 0;
+            tunnelRings = [];
+            globalRingCount = 0;
+            keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+            document.getElementById('hud-score').innerText = flyDistance;
+            document.getElementById('hud-twr').innerText = twr.toFixed(1);
+
+            const container = document.getElementById('canvas3d');
+            container.innerHTML = '';
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x030712);
+            scene.fog = new THREE.FogExp2(0x030712, 0.012);
+
+            // 保持视野放大一倍的超级广角 (110度)
+            camera = new THREE.PerspectiveCamera(110, container.clientWidth / 450, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, 450);
+            container.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0x00d26a, 1.2);
+            dirLight.position.set(20, 50, 20);
+            scene.add(dirLight);
+
+            // 战机模型
+            droneGroup = new THREE.Group();
+            const bodyGeo = new THREE.ConeGeometry(1.2, 4.5, 4);
+            bodyGeo.rotateX(Math.PI / 2);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.1, metalness: 0.5 });
+            const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+            droneGroup.add(bodyMesh);
+
+            const wingGeo = new THREE.BoxGeometry(4.8, 0.15, 1.0);
+            const wingMat = new THREE.MeshStandardMaterial({ color: 0x00ffcc });
+            const wingMesh = new THREE.Mesh(wingGeo, wingMat);
+            wingMesh.position.set(0, 0, 0.2);
+            droneGroup.add(wingMesh);
+
+            droneGroup.position.set(0, 0, 0);
+            scene.add(droneGroup);
+
+            updateCameraPosition(true);
+            generateInitialTunnel();
+
+            const countdownEl = document.getElementById('countdown');
+            countdownEl.style.display = 'block';
+            let count = 3;
+            countdownEl.innerText = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) { countdownEl.innerText = count; }
+                else if (count === 0) { countdownEl.innerText = "GO!"; }
+                else {
+                    clearInterval(timer);
+                    countdownEl.style.display = 'none';
+                    gameActive = true;
+                    animate();
+                }
+            }, 1000);
+        }
+
+        function updateCameraPosition(immediate = false) {
+            let targetCamX = droneGroup.position.x;
+            let targetCamY = droneGroup.position.y + 6.5;
+            let targetCamZ = droneGroup.position.z + 22.0;
+
+            if (immediate) {
+                camera.position.set(targetCamX, targetCamY, targetCamZ);
+            } else {
+                camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetCamX, 0.15);
+                camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetCamY, 0.15);
+                camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetCamZ, 0.15);
+            }
+            camera.lookAt(droneGroup.position.x, droneGroup.position.y + 0.3, droneGroup.position.z - 20);
+        }
+
+        function generateInitialTunnel() {
+            let startZ = -10;
+            for (let i = 0; i < 50; i++) {
+                createTunnelRing(startZ);
+                startZ -= 8;
+            }
+        }
+
+        function createTunnelRing(zPos) {
+            globalRingCount++;
+            let ringX = 0;
+            let ringY = 0;
+
+            if (globalRingCount > 4) {
+                let curveIndex = globalRingCount - 4;
+                ringX = Math.sin(curveIndex * 0.13) * 16.0;
+                ringY = Math.cos(curveIndex * 0.09) * 11.0;
+            }
+
+            const geometry = new THREE.TorusGeometry(11, 0.35, 8, 24);
+            let ringColor = globalRingCount % 2 === 0 ? 0x00ffcc : 0x3b82f6;
+            const material = new THREE.MeshStandardMaterial({
+                color: ringColor,
+                emissive: ringColor,
+                emissiveIntensity: 0.5,
+                roughness: 0.4
+            });
+
+            const ring = new THREE.Mesh(geometry, material);
+            ring.position.set(ringX, ringY, zPos);
+            scene.add(ring);
+            tunnelRings.push(ring);
+        }
+
+        function animate() {
+            if (!gameActive) return;
+
+            requestAnimationFrame(animate);
+
+            let moveX = 0;
+            let moveY = 0;
+
+            if (keys.ArrowUp) { moveY += moveSens; droneGroup.rotation.x = THREE.MathUtils.lerp(droneGroup.rotation.x, -0.28, 0.1); }
+            if (keys.ArrowDown) { moveY -= moveSens; droneGroup.rotation.x = THREE.MathUtils.lerp(droneGroup.rotation.x, 0.28, 0.1); }
+            if (keys.ArrowLeft) { moveX -= moveSens; droneGroup.rotation.z = THREE.MathUtils.lerp(droneGroup.rotation.z, 0.35, 0.1); }
+            if (keys.ArrowRight) { moveX += moveSens; droneGroup.rotation.z = THREE.MathUtils.lerp(droneGroup.rotation.z, -0.35, 0.1); }
+
+            if (!keys.ArrowUp && !keys.ArrowDown) droneGroup.rotation.x = THREE.MathUtils.lerp(droneGroup.rotation.x, 0, 0.1);
+            if (!keys.ArrowLeft && !keys.ArrowRight) droneGroup.rotation.z = THREE.MathUtils.lerp(droneGroup.rotation.z, 0, 0.1);
+
+            droneGroup.position.x += moveX;
+            droneGroup.position.y += moveY;
+            droneGroup.position.z -= speedZ;
+
+            flyDistance += 2;
+            document.getElementById('hud-score').innerText = flyDistance;
+            document.getElementById('hud-alt').innerText = (droneGroup.position.y + 20).toFixed(1);
+
+            updateCameraPosition();
+
+            let closestRing = null;
+            let minDistZ = 999;
+
+            for (let i = 0; i < tunnelRings.length; i++) {
+                let ring = tunnelRings[i];
+                let distZ = Math.abs(droneGroup.position.z - ring.position.z);
+
+                if (distZ < minDistZ) {
+                    minDistZ = distZ;
+                    closestRing = ring;
+                }
+
+                if (ring.position.z > droneGroup.position.z + 25) {
+                    scene.remove(ring);
+                    tunnelRings.splice(i, 1);
+                    i--;
+                    let furthestZ = tunnelRings.length > 0 ? tunnelRings[tunnelRings.length - 1].position.z : droneGroup.position.z;
+                    createTunnelRing(furthestZ - 8);
+                }
+            }
+
+            if (closestRing && minDistZ <= 2.2) {
+                let dronePos2D = new THREE.Vector2(droneGroup.position.x, droneGroup.position.y);
+                let ringPos2D = new THREE.Vector2(closestRing.position.x, closestRing.position.y);
+                let distToCenter = dronePos2D.distanceTo(ringPos2D);
+
+                if (distToCenter < 10.4) {
+                    closestRing.material.color.setHex(0x00ff66);
+                } else {
+                    closestRing.material.color.setHex(0xef4444);
+                    triggerGameOver("💥 弯道切弯失败！飞机狠狠撞上隧道内壁！");
+                    return;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function triggerGameOver(reason) {
+            gameActive = false;
+            document.getElementById('menu-view').style.display = 'flex';
+            document.getElementById('canvas3d').style.display = 'none';
+            document.getElementById('hud').style.display = 'none';
+            document.getElementById('share-btn').style.display = 'inline-block';
+
+            document.getElementById('m-title').innerHTML = `<span style="color:#ef4444">${reason}</span>`;
+            document.getElementById('linkage-text').innerHTML = `🏆 曲折冲刺结束！你在这条动态时空隧道中顽强穿梭了 <b>${flyDistance}</b> 米！当前使用的是来自主站 ${twr.toFixed(1)}:1 的动态物理参数。`;
+
+            document.querySelector('.btn-start').innerText = '🔄 重新安全起飞';
+        }
+
+        function copyMyScore() {
+            const text = `🛸 兄弟们！在 GEEK6S 3D 动态曲折隧道里，我顶着 ${twr.toFixed(1)}:1 的暴力全向动力狂飞了 ${flyDistance} 米！这曲折隧道的推背感太炸裂了，快来挑战：geek6s.com`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('战绩已复制！');
+            }).catch(() => {
+                alert('复制失败：' + text);
+            });
+        }
+    </script>
+</body>
+
+</html>

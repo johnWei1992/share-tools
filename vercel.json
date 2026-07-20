@@ -1,0 +1,13 @@
+{
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/ads.txt",
+            "destination": "data:text/plain;charset=utf-8,google.com%2C%20pub-5158841818618377%2C%20DIRECT%2C%20f08c47fec0942fa0"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
