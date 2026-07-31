@@ -4,85 +4,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>隐私政策 - D22 GEEK BOX</title>
+    <title>隐私政策 - GEEK6S BOX</title>
+    <!-- 引入 Tailwind CSS 样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-dark: #1d1d1f;
+            --text-main: #333336;
+            --text-muted: #86868b;
+            --bg-main: #f5f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background-color: #f4f6f9;
-            padding: 40px 20px;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        .apple-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        h1 {
-            font-size: 24px;
-            color: #111827;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
+        .apple-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
-        h2 {
-            font-size: 18px;
-            color: #111827;
-            margin-top: 24px;
-            margin-bottom: 12px;
-        }
-
-        p {
-            margin-bottom: 16px;
-            font-size: 14px;
-        }
-
-        ul {
-            margin-bottom: 16px;
-            padding-left: 20px;
-            font-size: 14px;
-        }
-
-        a {
-            color: #0c66ff;
+        .apple-link {
+            color: var(--apple-blue);
             text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
         }
 
-        a:hover {
+        .apple-link:hover {
+            opacity: 0.75;
             text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>隐私政策 (Privacy Policy)</h1>
-        <p>本隐私政策阐明了 D22 GEEK BOX（以下简称“本站”）如何收集、使用和保护用户在使用本站提供的在线工具时的数据与隐私信息。</p>
 
-        <h2>1. 核心数据隐私说明</h2>
-        <p>本站提供的“强密码生成器”、“沉浸番茄钟”等工具均完全基于用户的本地浏览器（客户端）运行，所有生成的密码、计时数据绝不会上传至任何服务器，本站不收集、不存储您的任何个人敏感输入数据。</p>
+    <!-- 顶部苹果风毛玻璃导航栏 -->
+    <header class="apple-nav py-4 px-8 flex justify-between items-center">
+        <a href="index.html" class="text-base font-bold tracking-tight text-[var(--apple-dark)]">⚡ GEEK<span>6S</span>
+            BOX</a>
+        <a href="index.html"
+            class="text-xs text-[var(--text-muted)] hover:text-[var(--apple-blue)] font-medium transition-colors">←
+            返回极客工具箱</a>
+    </header>
 
-        <h2>2. Google AdSense 广告与 Cookie 政策</h2>
-        <ul>
-            <li>本站集成了 Google AdSense 广告服务。Google 作为第三方广告供应商，会通过在您的浏览器上放置和读取 Cookie，或者使用网络信标（Web
-                Beacons）来收集信息，以便根据用户对本站或其他网站的访问历史来投放个性化广告。</li>
-            <li>Google 对广告 Cookie 的使用可让其及其合作伙伴能够基于用户对本站和/或因特网上其他网站的访问向用户投放广告。</li>
-            <li>用户可以通过访问 <a href="https://adssettings.google.com" target="_blank">Google 广告设置</a> 来选择停用个性化广告。</li>
-        </ul>
+    <!-- 隐私政策主体内容 -->
+    <main class="max-w-3xl mx-auto px-4 py-12 flex-grow w-full">
+        <article class="apple-card p-8 md:p-12">
+            <header class="mb-8 border-b border-[var(--border-light)] pb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-[var(--apple-dark)] mb-3 tracking-tight">隐私政策 (Privacy
+                    Policy)</h1>
+                <p class="text-xs text-[var(--text-muted)] font-medium">本隐私政策阐明了 GEEK6S
+                    BOX（以下简称“本站”）如何收集、使用和保护用户在使用本站提供的在线工具时的数据与隐私信息。</p>
+            </header>
 
-        <h2>3. 第三方内容与工具链接</h2>
-        <p>本站包含指向第三方网站（如 FPV 在线模拟器）的链接。我们对这些第三方网站的隐私做法或内容不承担任何责任。建议您在离开本站时阅读每个收集个人识别信息的网站的隐私政策。</p>
+            <div class="space-y-6 text-[var(--text-main)] text-sm md:text-base leading-relaxed">
 
-        <h2>4. 政策的变更与联系</h2>
-        <p>我们可能会不时更新本隐私政策。如果您对本政策有任何疑问，请通过我们的官方渠道与我们取得联系。</p>
-        <p style="margin-top: 40px; font-size: 12px; color: #6b7280; text-align: right;">最近更新日期：2026年7月</p>
-    </div>
+                <section>
+                    <h2 class="text-lg md:text-xl font-bold text-[var(--apple-dark)] mb-2">1. 核心数据隐私说明</h2>
+                    <p>
+                        本站提供的“强密码生成器”、“沉浸番茄钟”及 FPV
+                        动力推演等工具均完全基于用户的本地浏览器（客户端）运行，所有生成的密码、计时数据绝不会上传至任何服务器，本站不收集、不存储您的任何个人敏感输入数据。
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-lg md:text-xl font-bold text-[var(--apple-dark)] mb-2">2. Google AdSense 广告与 Cookie
+                        政策</h2>
+                    <ul class="list-disc pl-5 space-y-2 marker:text-[var(--apple-blue)]">
+                        <li>本站集成了 Google AdSense 广告服务。Google 作为第三方广告供应商，会通过在您的浏览器上放置和读取 Cookie，或者使用网络信标（Web
+                            Beacons）来收集信息，以便根据用户对本站或其他网站的访问历史来投放个性化广告。</li>
+                        <li>Google 对广告 Cookie 的使用可让其及其合作伙伴能够基于用户对本站和/或因特网上其他网站的访问向用户投放广告。</li>
+                        <li>用户可以通过访问 <a href="https://adssettings.google.com" target="_blank" class="apple-link">Google
+                                广告设置</a> 来选择停用个性化广告。</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-lg md:text-xl font-bold text-[var(--apple-dark)] mb-2">3. 第三方内容与工具链接</h2>
+                    <p>
+                        本站包含指向第三方网站（如 FPV 在线模拟器或外部资源）的链接。我们对这些第三方网站的隐私做法或内容不承担任何责任。建议您在离开本站时阅读每个收集个人识别信息的网站的隐私政策。
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-lg md:text-xl font-bold text-[var(--apple-dark)] mb-2">4. 政策的变更与联系</h2>
+                    <p>
+                        我们可能会不时更新本隐私政策。如果您对本政策有任何疑问，请通过我们的官方渠道与我们取得联系。
+                    </p>
+                </section>
+
+                <div
+                    class="pt-6 border-t border-[var(--border-light)] text-xs text-[var(--text-muted)] text-right font-medium">
+                    最近更新日期：2026年7月
+                </div>
+
+            </div>
+        </article>
+    </main>
+
+    <!-- 页脚 -->
+    <footer
+        class="text-center py-8 text-xs text-[var(--text-muted)] border-t border-[var(--border-light)] mt-12 bg-white/50">
+        © 2026 GEEK6S BOX. All Rights Reserved.
+    </footer>
+
 </body>
 
 </html>
