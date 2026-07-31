@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客户反馈留言板 - GEEK6S BOX</title>
+    <title>客户反馈与建议 - GEEK6S BOX</title>
     <!-- 引入 Tailwind CSS 样式 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -17,6 +17,7 @@
             --bg-main: #f5f5f7;
             --card-bg: #ffffff;
             --border-light: rgba(0, 0, 0, 0.06);
+            --success-green: #34c759;
         }
 
         * {
@@ -79,17 +80,19 @@
             border: none;
             cursor: pointer;
             width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
         }
 
         .apple-btn:hover {
             background-color: var(--apple-blue-hover);
+            transform: translateY(-1px);
         }
     </style>
 </head>
 
 <body>
 
-    <!-- 顶部苹果风毛玻璃导航栏 -->
+    <!-- 顶部导航栏 -->
     <header class="apple-nav py-4 px-8 flex justify-between items-center">
         <a href="index.html" class="text-base font-bold tracking-tight text-[var(--apple-dark)]">⚡ GEEK<span>6S</span>
             BOX</a>
@@ -107,10 +110,10 @@
             </header>
 
             <!-- 
-              💡 提示：为了让表单真正能收到信息，你可以去 https://formspree.io 注册一个免费账号，
-              将下面 action 里的 "https://formspree.io/f/你的表单ID" 替换成你自己的专属链接即可。
+              提示：你可以去 https://formspree.io 注册免费账号，
+              将 action 里的 "https://formspree.io/f/YOUR_FORM_ID" 替换成你自己的专属链接即可直接收取邮件。
             -->
-            <form action="https://formspree.io/f/xaqrzpew" method="POST" class="space-y-6">
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="space-y-6">
                 <div>
                     <label
                         class="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-2">你的称呼
@@ -137,7 +140,7 @@
                 </div>
 
                 <div>
-                    <button type="submit" class="apple-btn shadow-md">提交反馈</button>
+                    <button type="submit" class="apple-btn">提交反馈</button>
                 </div>
             </form>
         </article>
