@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🛸 GEEK6S BOX - 极速极客工具箱 & FPV动力推演中心</title>
-    <!-- 引入 Tailwind CSS 样式库以完美呈现苹果风排版 -->
+    <title>GEEK6S BOX - 极客工具箱与内嵌反馈系统</title>
+    <!-- 引入 Tailwind CSS 样式 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5158841818618377"
-        crossorigin="anonymous"></script>
     <style>
         :root {
             --apple-blue: #0071e3;
@@ -19,12 +17,10 @@
             --bg-main: #f5f5f7;
             --card-bg: #ffffff;
             --border-light: rgba(0, 0, 0, 0.06);
+            --success-green: #34c759;
         }
 
         * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
@@ -32,661 +28,175 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .container {
-            display: flex;
-            width: 100%;
-            max-width: 1240px;
+        .apple-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .apple-card {
             background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
             border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
-        /* 侧边栏样式 - 苹果毛玻璃微调风格 */
-        .sidebar {
-            width: 280px;
-            border-right: 1px solid var(--border-light);
-            padding: 36px 24px;
-            display: flex;
-            flex-direction: column;
-            background: #fafafa;
-            flex-shrink: 0;
-        }
-
-        .brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--apple-dark);
-            margin-bottom: 40px;
-            letter-spacing: -0.3px;
-        }
-
-        .brand span {
-            color: #34c759;
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--text-main);
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .nav-item:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-            color: var(--apple-dark);
-        }
-
-        .nav-item.active {
-            background-color: var(--apple-blue);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
-        }
-
-        .btn-simulator {
-            margin-top: 16px;
-            background: var(--apple-dark);
-            color: white !important;
-            text-align: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .btn-simulator:hover {
-            background: #333336 !important;
-        }
-
-        /* 主内容区样式 */
-        .content {
-            flex-grow: 1;
-            padding: 48px;
-            overflow-y: auto;
-            background: #ffffff;
-        }
-
-        .tool-card {
-            display: none;
-        }
-
-        .tool-card.active {
-            display: block;
-            animation: fadeIn 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-size: 26px;
-            color: var(--apple-dark);
-            margin-bottom: 6px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 32px;
-        }
-
-        /* 通用表单与布局 */
-        .input-area-group {
-            margin-bottom: 24px;
-        }
-
-        .input-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--apple-dark);
-            margin-bottom: 8px;
-        }
-
-        .input-box-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-box-wrapper input,
-        .input-box-wrapper select {
+        .apple-input {
             width: 100%;
-            padding: 14px 16px;
+            background-color: #fbfbfd;
             border: 1px solid #d2d2d7;
-            border-radius: 12px;
+            border-radius: 10px;
+            padding: 10px 14px;
             font-size: 14px;
-            outline: none;
-            transition: all 0.2s ease;
-            background: #fbfbfd;
             color: var(--apple-dark);
+            transition: all 0.2s ease;
+            outline: none;
         }
 
-        .input-box-wrapper input:focus,
-        .input-box-wrapper select:focus {
+        .apple-input:focus {
+            background-color: #ffffff;
             border-color: var(--apple-blue);
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
 
-        .action-submit-btn {
-            width: 100%;
-            padding: 14px;
+        .apple-btn {
             background-color: var(--apple-blue);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 500;
+            font-size: 14px;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
-        }
-
-        .action-submit-btn:hover {
-            background-color: var(--apple-blue-hover);
-            transform: translateY(-1px);
-        }
-
-        /* FPV 栅格专用布局 */
-        .fpv-grid-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        /* 选项卡样式 */
-        .tab-box-header {
-            display: flex;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 28px;
-            gap: 24px;
-        }
-
-        .tab-box-btn {
-            padding: 10px 2px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
+            border: none;
             cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
         }
 
-        .tab-box-btn.active {
-            color: var(--apple-blue);
-            border-bottom-color: var(--apple-blue);
-        }
-
-        .tab-panel-content {
-            display: none;
-        }
-
-        .tab-panel-content.active {
-            display: block;
-        }
-
-        /* 结果展示区 */
-        .result-display-panel {
-            margin-top: 24px;
-            padding: 20px;
-            background-color: #f5f5f7;
-            border: 1px dashed #d2d2d7;
-            border-radius: 12px;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        /* 广告容器 */
-        .ads-container {
-            margin-top: 40px;
-            padding: 20px;
-            background: #fbfbfd;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        /* 手机端响应式适配样式 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                flex-direction: column;
-                border-radius: 16px;
-            }
-
-            .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border-light);
-                padding: 24px 20px;
-            }
-
-            .brand {
-                margin-bottom: 16px;
-                text-align: center;
-            }
-
-            .nav-menu {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 6px;
-                justify-content: center;
-            }
-
-            .nav-item {
-                padding: 8px 12px;
-                font-size: 13px;
-                flex-grow: 1;
-                text-align: center;
-                justify-content: center;
-            }
-
-            .btn-simulator {
-                margin-top: 8px;
-                width: 100%;
-            }
-
-            .content {
-                padding: 24px 20px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            .subtitle {
-                margin-bottom: 20px;
-            }
-
-            .fpv-grid-layout {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
+        .apple-btn:hover {
+            background-color: var(--apple-blue-hover);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <!-- 左侧导航栏区域 -->
-        <div class="sidebar">
-            <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
-            <div class="nav-menu">
-                <div class="nav-item active" onclick="switchMainTool('link-card', this)">🔗 链接工具</div>
-                <div class="nav-item" onclick="switchMainTool('tomato-card', this)">🕒 沉浸番茄钟</div>
-                <div class="nav-item" onclick="switchMainTool('password-card', this)">🚀 强密码</div>
-                <div class="nav-item" onclick="switchMainTool('fpv-card', this)">🔋 FPV计算器</div>
-                <a href="fpv.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
-            </div>
-        </div>
+    <!-- 顶部导航栏 -->
+    <header class="apple-nav py-4 px-8 flex justify-between items-center">
+        <a href="#" class="text-base font-bold tracking-tight text-[var(--apple-dark)]">⚡ GEEK<span>6S</span> BOX</a>
+        <div class="text-xs text-[var(--text-muted)] font-medium">极客高效工具箱</div>
+    </header>
 
-        <!-- 右侧主内容区域 -->
-        <div class="content">
+    <!-- 主体内容区 -->
+    <main class="max-w-3xl mx-auto px-4 py-10 flex-grow w-full space-y-12">
 
-            <!-- 1. 链接工具卡片 -->
-            <div class="tool-card active" id="link-card">
-                <h1 id="link-title">生成二维码</h1>
-                <p class="subtitle" id="link-subtitle">将您的长链接转化为超清二维码，方便手机用户扫码直接访问。</p>
+        <!-- 模块一：闪传助手 / 工具演示卡片 -->
+        <section class="apple-card p-8">
+            <h1 class="text-2xl font-bold text-[var(--apple-dark)] mb-2">闪传与二维码助手</h1>
+            <p class="text-sm text-[var(--text-muted)] mb-6">快速生成二维码、条形码或缩短链接，支持多端自适应。</p>
 
-                <div class="tab-box-header">
-                    <div class="tab-box-btn active" onclick="switchLinkSubTab('qrcode', this)">二维码</div>
-                    <div class="tab-box-btn" onclick="switchLinkSubTab('barcode', this)">条形码</div>
-                    <div class="tab-box-btn" onclick="switchLinkSubTab('shorturl', this)">短网址</div>
-                </div>
-
-                <div class="tab-panel-content active" id="panel-qrcode">
-                    <div class="input-area-group">
-                        <div class="input-label">输入您的原始长链接</div>
-                        <div class="input-box-wrapper"><input type="text" placeholder="例如: http://example.com"></div>
-                    </div>
-                </div>
-                <div class="tab-panel-content" id="panel-barcode">
-                    <div class="input-area-group">
-                        <div class="input-label">输入需要生成条形码的数字或文本</div>
-                        <div class="input-box-wrapper"><input type="text" placeholder="例如: 123456789"></div>
-                    </div>
-                </div>
-                <div class="tab-panel-content" id="panel-shorturl">
-                    <div class="input-area-group">
-                        <div class="input-label">输入需要缩短的长网址</div>
-                        <div class="input-box-wrapper"><input type="text"
-                                placeholder="例如: http://very-long-url.com/path"></div>
-                    </div>
-                </div>
-
-                <button class="action-submit-btn" onclick="executeLinkAction()">立即生成</button>
-                <div class="result-display-panel" id="link-result">生成后的结果将安全地显示在这里</div>
-
-                <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
+            <!-- 工具交互区域 -->
+            <div class="bg-[var(--bg-main)] p-6 rounded-xl border border-dashed border-gray-300 mb-6 text-center">
+                <input type="text" placeholder="输入需要转换的网址或文本..." class="apple-input mb-4">
+                <button class="apple-btn w-full">立即生成与转换</button>
             </div>
 
-            <!-- 2. 番茄钟卡片 -->
-            <div class="tool-card" id="tomato-card">
-                <h1>🕒 沉浸式番茄工作法</h1>
-                <p class="subtitle">科学规划专注时间，拒绝拖延，让效率成倍提升。</p>
-                <div style="text-align: center; padding: 30px 0;">
-                    <div
-                        style="font-size: 64px; font-weight: 700; color: var(--apple-dark); margin-bottom: 20px; letter-spacing: -1px;">
-                        25:00
-                    </div>
-                    <button class="action-submit-btn"
-                        style="max-width: 200px; background: var(--apple-dark);">开启专注</button>
+            <!-- 内嵌反馈与归类面板 -->
+            <div class="border-t border-[var(--border-light)] pt-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">💬
+                        针对此工具的反馈留言板</span>
+                    <span class="text-xs px-2 py-0.5 bg-blue-50 text-[var(--apple-blue)] rounded-full font-medium">归类：#
+                        闪传助手</span>
                 </div>
+                <form onsubmit="handleFeedback(event, '闪传助手')" class="space-y-3">
+                    <input type="text" placeholder="你的称呼 (可选)" class="apple-input text-xs">
+                    <textarea rows="2" required placeholder="对这个工具有什么改进建议或遇到什么 Bug？"
+                        class="apple-input text-xs resize-none"></textarea>
+                    <div class="flex justify-end">
+                        <button type="submit" class="apple-btn text-xs px-4 py-2">提交该模块反馈</button>
+                    </div>
+                </form>
+                <!-- 实时展示该分组留言的容器 -->
+                <div id="feedback-list-闪传助手" class="mt-4 space-y-2"></div>
+            </div>
+        </section>
 
-                <div
-                    style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 24px;">
-                    <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡
-                        番茄工作法与大脑专注力科学</h3>
-                    <div
-                        style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 为什么是 25
-                                分钟？—— 认知资源理论</strong>
-                            心理学与神经科学研究表明，人类大脑的高效专注力存在“天花板”。超过 20-30 分钟的周期，大脑前额叶皮层会因持续消耗营养而疲劳。25
-                            分钟是在防防御性疲劳的前提下，压榨出最高产输出的黄金周期。
-                        </div>
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
-                                蔡加尼克效应与对抗拖延症</strong>
-                            心理学上的“蔡加尼克效应”表明，人类对未完成的任务会保持高度的关注。番茄钟通过将宏大任务拆解为“只专注25分钟”，能大幅降低大脑的启动抗拒心理。
-                        </div>
-                    </div>
-                </div>
-                <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
+
+        <!-- 模块二：沉浸番茄钟 -->
+        <section class="apple-card p-8">
+            <h1 class="text-2xl font-bold text-[var(--apple-dark)] mb-2">沉浸番茄钟</h1>
+            <p class="text-sm text-[var(--text-muted)] mb-6">科学划分 25 分钟专注时间，告别拖延症。</p>
+
+            <!-- 工具交互区域 -->
+            <div class="bg-[var(--bg-main)] p-6 rounded-xl border border-dashed border-gray-300 mb-6 text-center">
+                <div class="text-4xl font-ext500 text-[var(--apple-dark)] mb-3 tracking-widest">25:00</div>
+                <button class="apple-btn w-full bg-[var(--success-green)] hover:bg-emerald-600">开始专注计时</button>
             </div>
 
-            <!-- 3. 强密码卡片 -->
-            <div class="tool-card" id="password-card">
-                <h1>🚀 本地随机强密码生成器</h1>
-                <p class="subtitle">基于浏览器原生安全随机数，生成绝不上传服务器的高强度密码。</p>
-                <div class="input-area-group">
-                    <div class="input-label">密码长度</div>
-                    <div class="input-box-wrapper"><input type="number" id="pwd-len" value="16"></div>
+            <!-- 内嵌反馈与归类面板 -->
+            <div class="border-t border-[var(--border-light)] pt-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">💬
+                        针对此工具的反馈留言板</span>
+                    <span
+                        class="text-xs px-2 py-0.5 bg-emerald-50 text-[var(--success-green)] rounded-full font-medium">归类：#
+                        沉浸番茄钟</span>
                 </div>
-                <button class="action-submit-btn" onclick="generateSecurePassword()">瞬间生成安全密码</button>
-                <div class="result-display-panel" id="password-result"
-                    style="font-family:ui-monospace, monospace; font-size:15px; font-weight: 500;">
-                    点击按钮生成</div>
-
-                <div
-                    style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 24px;">
-                    <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡
-                        现代密码安全学与密码熵（Entropy）</h3>
-                    <div
-                        style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1.
-                                什么是密码熵？长度为什么比复杂性更重要？</strong>
-                            密码熵公式为 $E = L \times \log_2(R)$（$L$ 为长度，$R$ 为字符集）。这意味着增加长度（$L$）对提升强度的效果呈指数级增加，远超单纯添加特殊符号。一个
-                            16 位纯数字密码，其抗暴力破译能力往往远超 8 位复杂密码。
-                        </div>
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
-                                真随机数（CSPRNG）与普通伪随机数</strong>
-                            本工具采用原生 `crypto.getRandomValues()` 算法。它引入操作系统底层的硬件熵源（如 CPU
-                            抖动、热噪声等），具备绝对的不可预测性，确保密码达到军事级防御强度。
-                        </div>
+                <form onsubmit="handleFeedback(event, '沉浸番茄钟')" class="space-y-3">
+                    <input type="text" placeholder="你的称呼 (可选)" class="apple-input text-xs">
+                    <textarea rows="2" required placeholder="对番茄钟计时、音效或功能有什么想法？"
+                        class="apple-input text-xs resize-none"></textarea>
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="apple-btn text-xs px-4 py-2 bg-[var(--success-green)]">提交该模块反馈</button>
                     </div>
-                </div>
-                <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
+                </form>
+                <!-- 实时展示该分组留言的容器 -->
+                <div id="feedback-list-沉浸番茄钟" class="mt-4 space-y-2"></div>
             </div>
+        </section>
 
-            <!-- 4. FPV计算器卡片（内置跨页联动数据引擎） -->
-            <div class="tool-card" id="fpv-card">
-                <h1>🔋 FPV 航模物理参数推演箱</h1>
-                <p class="subtitle">精准计算整机推重比、理论续航与电池起飞压降，拒绝盲目炸机。</p>
+    </main>
 
-                <div class="fpv-grid-layout">
-                    <div class="input-area-group">
-                        <div class="input-label">电池起飞电压 (V)</div>
-                        <div class="input-box-wrapper">
-                            <select id="fpv-voltage">
-                                <option value="25.2">6S 满电 (25.2V)</option>
-                                <option value="16.8">4S 满电 (16.8V)</option>
-                                <option value="22.2">6S 标称 (22.2V)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-area-group">
-                        <div class="input-label">整机全备重量 (包含电池/GoPro) (g)</div>
-                        <div class="input-box-wrapper"><input type="number" id="fpv-weight" value="750"></div>
-                    </div>
-                    <div class="input-area-group">
-                        <div class="input-label">单电机最大推力 (g)</div>
-                        <div class="input-box-wrapper"><input type="number" id="fpv-thrust" value="1200"></div>
-                    </div>
-                    <div class="input-area-group">
-                        <div class="input-label">电池电量容量 (mAh)</div>
-                        <div class="input-box-wrapper"><input type="number" id="fpv-mah" value="1300"></div>
-                    </div>
-                </div>
+    <!-- 页脚 -->
+    <footer
+        class="text-center py-8 text-xs text-[var(--text-muted)] border-t border-[var(--border-light)] mt-12 bg-white/50">
+        © 2026 GEEK6S BOX. All Rights Reserved.
+    </footer>
 
-                <button class="action-submit-btn" onclick="calculateFpvPhysics()">启动多维数据推演</button>
-                <div class="result-display-panel" id="fpv-result" style="text-align:left; justify-content:flex-start;">
-                    点击按钮启动多维参数物理推演...</div>
-
-                <div
-                    style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 24px;">
-                    <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡 FPV
-                        无人机空气动力学与电学公式科普</h3>
-                    <div
-                        style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 推重比
-                                (Thrust-to-Weight Ratio) 与特技飞行</strong>
-                            推重比公式为 $TWR = \frac{F_{total}}{M_{total}}$。在 FPV 花飞中，标准的 6S 动力通常能带来高达 $6:1$ 甚至 $8:1$
-                            以上的暴力推重比。高推重比能够保证在做“高空甩尾”或“极限拉起”动作时有足够的物理惯性支撑。
-                        </div>
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
-                                霍尔效应电流与理论悬停续航</strong>
-                            理论悬停时间基于欧姆定律及电量守恒转换。本工具采用空气动力学经验公式，推演全机在全载重下达到悬停平衡状态所需的基准电流，从而精准预测电池的理论耗竭曲线。
-                        </div>
-                    </div>
-                </div>
-                <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- 整合内置的文字说明与原创文章区块 (用于彻底解决低价值内容) -->
-            <!-- ========================================== -->
-            <div style="margin-top: 50px; border-top: 1px solid var(--border-light); padding-top: 40px;">
-
-                <!-- 工具页详细说明文案 -->
-                <section
-                    style="background: #fbfbfd; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); margin-bottom: 30px;">
-                    <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--apple-dark);">关于
-                        GEEK6S 在线二维码生成器</h2>
-                    <p style="font-size: 14px; color: var(--text-main); line-height: 1.6; margin-bottom: 12px;">
-                        欢迎使用本站提供的免费在线二维码（QR Code）生成工具。本工具旨在为广大开发者、运营人员及日常生活用户提供一个<strong>高效、安全、便捷</strong>的二维码转换解决方案。
-                    </p>
-                    <h3
-                        style="font-size: 15px; font-weight: 600; margin-top: 16px; margin-bottom: 8px; color: var(--apple-dark);">
-                        主要功能与特点：</h3>
-                    <ul style="font-size: 14px; color: var(--text-main); line-height: 1.8; padding-left: 20px;">
-                        <li><strong>长链转码</strong>：支持将冗长的网址、文本或链接快速压缩转化为高清二维码图形。</li>
-                        <li><strong>隐私安全</strong>：所有转换均在浏览器本地或安全通道完成，不会泄露您的私密数据。</li>
-                        <li><strong>即时生成</strong>：无需下载任何客户端或 App，打开网页即可随时随地生成并下载使用。</li>
-                    </ul>
-                </section>
-
-                <!-- 高质量原创文章内容 (完全内嵌，零 404 风险) -->
-                <article
-                    style="background: #ffffff; padding: 32px; border-radius: 16px; border: 1px solid var(--border-light);">
-                    <header style="margin-bottom: 24px;">
-                        <h2
-                            style="font-size: 22px; font-weight: 700; color: var(--apple-dark); margin-bottom: 8px; letter-spacing: -0.3px;">
-                            如何利用番茄工作法与在线工具高效管理个人时间？
-                        </h2>
-                        <p style="font-size: 13px; color: var(--text-muted);">发布于 2026年7月30日 · 深度极客专栏</p>
-                    </header>
-
-                    <div
-                        style="font-size: 14px; color: var(--text-main); line-height: 1.8; display: flex; flex-direction: column; gap: 16px;">
-                        <p>
-                            在快节奏的现代生活中，无论是程序员、设计师还是文字工作者，常常会面临注意力不集中、工作效率低下的困扰。明明在电脑前坐了一整天，却总觉得效率不高。今天我们将探讨如何结合经典的<strong>番茄工作法（Pomodoro
-                                Technique）</strong>与本站的在线实用小工具，帮助你彻底告别拖延症。
-                        </p>
-
-                        <h3 style="font-size: 16px; font-weight: 600; color: var(--apple-dark); margin-top: 10px;">
-                            什么是番茄工作法？</h3>
-                        <p>
-                            番茄工作法是由弗朗西斯科·西里洛于 1980 年代创立的一种时间管理方法。核心理念非常简单：<strong>将工作时间划分为若干个 25
-                                分钟的专注段落（称为一个“番茄钟”）</strong>，每个番茄钟之间穿插 5 分钟的短暂休息。这种方法能够有效缓解大脑的疲劳感，保持持续的高效输出。
-                        </p>
-
-                        <h3 style="font-size: 16px; font-weight: 600; color: var(--apple-dark); margin-top: 10px;">
-                            如何高效执行番茄工作法？</h3>
-                        <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-                            <li><strong>明确目标</strong>：在开始前，列出你接下来 25 分钟内必须完成的唯一小任务（例如：编写一段代码、修复一个 Bug 或校对一篇文档）。</li>
-                            <li><strong>绝对专注</strong>：启动计时器，在此期间关闭社交软件通知，拒绝一切外界干扰。</li>
-                            <li><strong>定时休息</strong>：当闹钟响起时，无论手头工作是否完成，必须停下来休息 5 分钟，喝杯水或远眺放松。</li>
-                        </ol>
-
-                        <h3 style="font-size: 16px; font-weight: 600; color: var(--apple-dark); margin-top: 10px;">结语
-                        </h3>
-                        <p>
-                            工欲善其事，必先利其器。你可以直接使用本站内置的沉浸番茄钟工具来开始你的第一个专注周期。只要坚持每天进行 4 到 8 个番茄钟的练习，你会发现自己的专注力和产出效率会有质的飞跃。
-                        </p>
-                    </div>
-                </article>
-
-            </div>
-
-            <!-- 底部声明区域 -->
-            <footer
-                style="margin-top: 48px; border-top: 1px solid var(--border-light); padding-top: 24px; text-align: center; font-size: 12px; color: var(--text-muted);">
-                © 2026 GEEK6S BOX. All Rights Reserved. | <a href="privacy.html"
-                    style="color: var(--text-muted); text-decoration: none; font-weight: 600;">关于我们 & 隐私政策 (About &
-                    Privacy)</a>
-            </footer>
-
-        </div>
-    </div>
-
-    <!-- JavaScript 逻辑控制块 -->
+    <!-- 简单的本地前端动态归类留言脚本（支持即时查看体验） -->
     <script>
-        let currentLinkSubTab = 'qrcode';
+        function handleFeedback(event, categoryName) {
+            event.preventDefault();
+            const form = event.target;
+            const name = form.querySelector('input[type="text"]').value.trim() || '匿名极客';
+            const message = form.querySelector('textarea').value.trim();
 
-        function switchMainTool(cardId, element) {
-            document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById(cardId).classList.add('active');
-            element.classList.add('active');
-        }
+            if (!message) return;
 
-        function switchLinkSubTab(subTab, element) {
-            currentLinkSubTab = subTab;
-            document.querySelectorAll('.tab-box-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-panel-content').forEach(p => p.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('panel-' + subTab).classList.add('active');
-
-            const titles = { qrcode: '生成二维码', barcode: '生成条形码', shorturl: '短网址生成' };
-            const subtitles = { qrcode: '将您的长链接转化为超清二维码，方便手机直接扫描访问。', barcode: '快捷将特定纯文本或数字转化为国际标准的一维条形码结构。', shorturl: '缩短冗长的网址链路，生成便于传播的极简短外链链接。' };
-            document.getElementById('link-title').innerText = titles[subTab];
-            document.getElementById('link-subtitle').innerText = subtitles[subTab];
-        }
-
-        function executeLinkAction() {
-            const panel = document.getElementById('panel-' + currentLinkSubTab);
-            const inputVal = panel.querySelector('input').value;
-            if (!inputVal) { alert('输入内容不能为空！'); return; }
-            document.getElementById('link-result').innerHTML = `<strong>✨ 成功：</strong> 针对 [${inputVal}] 的数据操作已在本地完美就绪！（虚拟环境生成完毕）`;
-        }
-
-        function generateSecurePassword() {
-            const len = parseInt(document.getElementById('pwd-len').value) || 16;
-            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-            let res = "";
-            const array = new Uint32Array(len);
-            window.crypto.getRandomValues(array);
-            for (let i = 0; i < len; i++) { res += chars[array[i] % chars.length]; }
-            document.getElementById('password-result').innerText = res;
-        }
-
-        // ====== FPV 计算核心逻辑与跨页联动引擎 ======
-        function calculateFpvPhysics() {
-            const voltage = parseFloat(document.getElementById('fpv-voltage').value);
-            const weight = parseFloat(document.getElementById('fpv-weight').value);
-            const thrust = parseFloat(document.getElementById('fpv-thrust').value);
-            const mah = parseFloat(document.getElementById('fpv-mah').value);
-
-            if (!weight || !thrust || !mah) { alert('请填写完整的物理参数！'); return; }
-
-            const totalThrust = thrust * 4;
-            const twr = totalThrust / weight;
-
-            localStorage.setItem('fpv_twr', twr);
-
-            const hoverCurrent = (weight / 100) * 4.5;
-            const minutes = (mah / 1000) / hoverCurrent * 60;
-
-            document.getElementById('fpv-result').innerHTML = `
-                <div style="line-height:1.8;">
-                    🚀 <b>多维推演报告已就绪：</b><br>
-                    • 💥 <b>全机整机推重比：</b> <span style="color:#34c759; font-weight:bold;">${twr.toFixed(2)} : 1</span> ${twr >= 6 ? ' (🔥 符合 6S 极速暴力花飞标准)' : ' (⚠️ 动力偏温和，操控相对沉重)'}<br>
-                    • 🕒 <b>理论极限悬停时间：</b> 约 ${minutes.toFixed(1)} 分钟<br>
-                    • ⚡ <b>全油门极限大电流压降评估：</b> 安全（基于 ${voltage}V 基准测算）<br>
-                    <span style="display:block; margin-top:8px; color:var(--apple-blue); font-size:12px;">💡 <b>联动提示：</b>推重比参数已成功写入底层数据接口，立即点击侧边栏的<b>“极速模拟器”</b>，飞机手感已根据您的配置实时发生改变！</span>
+            const container = document.getElementById(`feedback-list-${categoryName}`);
+            const item = document.createElement('div');
+            item.className = 'p-3 bg-gray-50 rounded-lg text-xs border border-gray-100 flex flex-col space-y-1';
+            item.innerHTML = `
+                <div class="flex justify-between text-gray-400">
+                    <span class="font-semibold text-gray-700">${name}</span>
+                    <span>刚刚</span>
                 </div>
+                <div class="text-gray-600">${message}</div>
             `;
+            container.prepend(item);
+            form.reset();
+            alert(`成功提交到 [${categoryName}] 分组！`);
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const tab = urlParams.get('tab');
-            if (tab === 'fpv') {
-                const fpvItem = document.querySelector(".nav-item[onclick*='fpv-card']");
-                if (fpvItem) fpvItem.click();
-            }
-        });
     </script>
 </body>
 
