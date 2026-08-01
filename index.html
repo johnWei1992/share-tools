@@ -103,6 +103,19 @@
             box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
         }
 
+        .btn-simulator {
+            margin-top: 16px;
+            background: var(--apple-dark);
+            color: white !important;
+            justify-content: center;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn-simulator:hover {
+            background: #333336 !important;
+        }
+
         /* 主内容区样式 */
         .content {
             flex-grow: 1;
@@ -286,7 +299,7 @@
 <body>
 
     <div class="container">
-        <!-- 左侧导航栏区域 -->
+        <!-- 左侧导航栏区域（修复了原代码中漏掉的 sidebar 容器标签与完整的链接项目） -->
         <div class="sidebar">
             <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
             <div class="nav-menu">
@@ -295,8 +308,8 @@
                 <a href="password.html" class="nav-item">🔐 强密码</a>
                 <a href="fpv.html" class="nav-item">🔋 FPV计算器</a>
                 <a href="json.html" class="nav-item">📦 JSON 格式化</a>
-                <a href="simulator.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
                 <a href="feedback.html" class="nav-item">💬 互动留言板</a>
+                <a href="simulator.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
             </div>
         </div>
 
