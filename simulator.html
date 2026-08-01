@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🛸 3D 真实 FPV 航线穿梭模拟器 - GEEK6S BOX</title>
+    <title>🛸 3D 超极速 FPV 无限航线穿梭模拟器 - GEEK6S BOX</title>
     <!-- 引入 Tailwind CSS 样式库 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Three.js 3D 图形库与控制器 -->
+    <!-- 引入 Three.js 3D 图形库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
@@ -28,7 +28,6 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             touch-action: none;
-            /* 防止移动端默认缩放滑动 */
         }
 
         body {
@@ -51,7 +50,6 @@
             border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
-        /* 侧边栏样式 */
         .sidebar {
             width: 280px;
             border-right: 1px solid var(--border-light);
@@ -114,7 +112,6 @@
             text-align: center;
         }
 
-        /* 主内容区样式 */
         .content {
             flex-grow: 1;
             padding: 48px;
@@ -141,7 +138,6 @@
             text-align: center;
         }
 
-        /* 3D 渲染视口容器 */
         .game-wrapper {
             position: relative;
             width: 100%;
@@ -152,6 +148,7 @@
             overflow: hidden;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            outline: none;
         }
 
         #webgl-container {
@@ -160,7 +157,6 @@
             display: block;
         }
 
-        /* HUD 实时飞行仪表盘 */
         .flight-hud {
             position: absolute;
             top: 16px;
@@ -180,7 +176,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* 开始提示遮罩 */
         .overlay-screen {
             position: absolute;
             inset: 0;
@@ -213,40 +208,6 @@
         .action-btn:hover {
             background: var(--apple-blue-hover);
             transform: scale(1.05);
-        }
-
-        /* 移动端虚拟触控遥感区域 */
-        .mobile-controls {
-            display: none;
-            position: absolute;
-            bottom: 16px;
-            left: 0;
-            right: 0;
-            justify-content: space-between;
-            padding: 0 24px;
-            pointer-events: none;
-        }
-
-        .virtual-stick {
-            width: 90px;
-            height: 90px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            pointer-events: auto;
-            position: relative;
-            backdrop-filter: blur(4px);
-        }
-
-        .stick-knob {
-            width: 40px;
-            height: 40px;
-            background: #ffffff;
-            border-radius: 50%;
-            position: absolute;
-            top: 23px;
-            left: 23px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .info-card-box {
@@ -296,10 +257,6 @@
             .content {
                 padding: 24px 20px;
             }
-
-            .mobile-controls {
-                display: flex;
-            }
         }
     </style>
 </head>
@@ -323,45 +280,35 @@
 
         <!-- 右侧主内容区 -->
         <div class="content">
-            <h1>🌐 3D 真实航线穿梭模拟系统</h1>
-            <p class="subtitle">沉浸式三维物理空间，严格穿梭指定环形光圈航线，支持 PC 与移动端操纵。</p>
+            <h1>🌐 3D 超极速 FPV 无限航线穿梭系统</h1>
+            <p class="subtitle">超高极速推进、大角度急弯、多维空间穿越与强制全局键盘焦点捕获。</p>
 
-            <!-- 3D 画布渲染包裹层 -->
-            <div class="game-wrapper">
+            <!-- 3D 渲染视口容器 -->
+            <div class="game-wrapper" id="game-box" tabindex="0">
                 <div class="flight-hud">
-                    <span id="hud-speed">速度: 0 km/h</span>
-                    <span id="hud-gate">航线: 0 / 5</span>
-                    <span id="hud-status" style="color:#34c759;">状态: 飞行准备就绪</span>
+                    <span id="hud-speed">超极速: 0 km/h</span>
+                    <span id="hud-score">连续穿越: 0</span>
+                    <span id="hud-status" style="color:#34c759;">状态: 键盘已强制激活</span>
                 </div>
 
                 <div id="webgl-container"></div>
 
                 <!-- 游戏开始/重置遮罩 -->
                 <div id="start-screen" class="overlay-screen">
-                    <h2 style="font-size: 22px; margin-bottom: 8px;">准备好体验 3D FPV 穿梭了吗？</h2>
-                    <p style="color: #86868b; font-size: 13px; margin-bottom: 16px;">操控航机准确穿过前方绿色的 3D 空间圆环航线。</p>
-                    <button class="action-btn" onclick="initSimulation()">启动 3D 引擎并起飞</button>
-                </div>
-
-                <!-- 移动端虚拟摇杆 -->
-                <div class="mobile-controls">
-                    <div id="left-stick" class="virtual-stick">
-                        <div id="left-knob" class="stick-knob"></div>
-                    </div>
-                    <div id="right-stick" class="virtual-stick">
-                        <div id="right-knob" class="stick-knob"></div>
-                    </div>
+                    <h2 id="screen-title" style="font-size: 22px; margin-bottom: 8px;">3D 超极速航线准备就绪</h2>
+                    <p id="screen-desc" style="color: #86868b; font-size: 13px; margin-bottom: 16px;">点击下方按钮后，直接使用 WASD
+                        与 Space 键即可完美操控战机。</p>
+                    <button id="start-action-btn" class="action-btn" onclick="initSimulation()">启动超极速 FPV 引擎</button>
                 </div>
             </div>
 
             <!-- 说明区块 -->
             <div class="info-card-box">
-                <h3>📖 操作指南与航线规则</h3>
+                <h3>📖 键盘强效控制指南</h3>
                 <div class="info-card-item">
-                    <b>1. PC 端操作：</b>使用键盘 <kbd>W</kbd> <kbd>S</kbd> 控制俯仰，<kbd>A</kbd> <kbd>D</kbd>
-                    控制左右倾斜偏航，<kbd>Space</kbd> 增加油门推进。<br>
-                    <b>2. 移动端触控：</b>左侧虚拟摇杆控制高度与平移，右侧虚拟摇杆控制方向与航向。<br>
-                    <b>3. 3D 航线穿越：</b>必须从正中心穿过绿色动态空间环形门（Gate），错过或撞击边界将计入飞行偏离警告。
+                    <b>1. 焦点强制聚焦：</b>启动模拟后，系统会自动将键盘焦点锁定至 3D 视口，按下任意键即可操控。<br>
+                    <b>2. 超高速推进：</b>按住 <kbd>Space</kbd> 爆发推进，配合 <kbd>W</kbd> <kbd>S</kbd> <kbd>A</kbd> <kbd>D</kbd>
+                    进行大角度急弯与高低空间穿梭。
                 </div>
             </div>
         </div>
@@ -371,121 +318,211 @@
     <script>
         let scene, camera, renderer, drone;
         let gates = [];
-        let currentGateIndex = 0;
+        let totalPassed = 0;
+        let missedCount = 0;
         let isRunning = false;
 
         let flightState = {
-            x: 0, y: 2, z: 0,
-            vx: 0, vy: 0, vz: -0.4,
-            pitch: 0, roll: 0,
-            speed: 45
+            x: 0, y: 3, z: 0,
+            vz: -1.5,
+            pitch: 0, roll: 0, yaw: 0
         };
 
         let keys = {};
 
         function initSimulation() {
             document.getElementById('start-screen').style.display = 'none';
-            if (renderer) return;
 
-            // 1. 初始化 Three.js 3D 场景
+            // 强制将焦点赋予游戏容器，确保键盘事件 100% 触发
+            const gameBox = document.getElementById('game-box');
+            gameBox.focus();
+
             const container = document.getElementById('webgl-container');
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0b0d14);
-            scene.fog = new THREE.FogExp2(0x0b0d14, 0.035);
+            container.innerHTML = '';
 
-            camera = new THREE.PerspectiveCamera(65, container.clientWidth / container.clientHeight, 0.1, 1000);
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x05070a);
+            scene.fog = new THREE.FogExp2(0x05070a, 0.02);
+
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // 环境光源与平行光
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0x0071e3, 0.8);
-            dirLight.position.set(10, 20, 10);
+            const dirLight = new THREE.DirectionalLight(0x0071e3, 1.2);
+            dirLight.position.set(10, 30, 10);
             scene.add(dirLight);
 
-            // 2. 创建网格地面与空间环境
-            const gridHelper = new THREE.GridHelper(200, 50, 0x0071e3, 0x222228);
-            gridHelper.position.y = -2;
+            const gridHelper = new THREE.GridHelper(500, 100, 0x0071e3, 0x1a1a24);
+            gridHelper.position.y = -3;
             scene.add(gridHelper);
 
-            // 3. 构建 3D 穿梭航线环（Gates）
-            const gateGeo = new THREE.TorusGeometry(3.5, 0.25, 16, 100);
-            const gateMat = new THREE.MeshBasicMaterial({ color: 0x34c759 });
+            gates.forEach(g => scene.remove(g));
+            gates = [];
+            totalPassed = 0;
+            missedCount = 0;
+            flightState.x = 0;
+            flightState.y = 3;
+            flightState.z = 0;
+            flightState.vz = -1.5;
+            flightState.pitch = 0;
+            flightState.roll = 0;
+            flightState.yaw = 0;
 
-            for (let i = 0; i < 6; i++) {
+            let currentZ = -15;
+            let currentX = 0;
+            let currentY = 3;
+
+            for (let i = 0; i < 12; i++) {
+                const gateGeo = new THREE.TorusGeometry(3.5, 0.25, 16, 100);
+                const gateMat = new THREE.MeshBasicMaterial({ color: i === 0 ? 0x0071e3 : 0x34c759 });
                 const gate = new THREE.Mesh(gateGeo, gateMat);
-                gate.position.set((Math.random() - 0.5) * 15, Math.random() * 4 + 1, - (i + 1) * 25);
+
+                currentX += (Math.random() - 0.5) * 20;
+                currentY += (Math.random() - 0.5) * 10;
+                if (currentY < 1) currentY = 1;
+                if (currentY > 14) currentY = 14;
+
+                gate.position.set(currentX, currentY, currentZ);
+                gate.rotation.y = (Math.random() - 0.5) * 1.0;
+                gate.rotation.x = (Math.random() - 0.5) * 0.7;
+
                 scene.add(gate);
                 gates.push(gate);
+
+                currentZ -= 22;
             }
 
-            // 4. 构建 3D 穿梭机模型（简化代表机身）
             const droneGeo = new THREE.BoxGeometry(0.8, 0.2, 1.2);
-            const droneMat = new THREE.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.3 });
+            const droneMat = new THREE.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.2 });
             drone = new THREE.Mesh(droneGeo, droneMat);
             scene.add(drone);
 
-            // 监听键盘事件
-            window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-            window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+            // 全局和元素级双重键盘侦听绑定
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+            window.addEventListener('keydown', handleKeyDown, true);
+            window.addEventListener('keyup', handleKeyUp, true);
 
             isRunning = true;
             animate();
         }
 
+        function handleKeyDown(e) {
+            if (!isRunning) return;
+            const k = e.key.toLowerCase();
+            if (['w', 's', 'a', 'd', ' '].includes(k) || e.code === 'Space') {
+                keys[k] = true;
+                keys[' '] = keys[' '] || (e.code === 'Space');
+                e.preventDefault(); // 阻止页面默认滚动
+            }
+        }
+
+        function handleKeyUp(e) {
+            const k = e.key.toLowerCase();
+            if (['w', 's', 'a', 'd', ' '].includes(k) || e.code === 'Space') {
+                keys[k] = false;
+                if (e.code === 'Space') keys[' '] = false;
+            }
+        }
+
         function animate() {
             if (!isRunning) return;
 
-            // 飞行物理响应
-            if (keys['w']) flightState.pitch -= 0.02;
-            if (keys['s']) flightState.pitch += 0.02;
-            if (keys['a']) flightState.roll += 0.03;
-            if (keys['d']) flightState.roll -= 0.03;
-            if (keys[' ']) flightState.vz -= 0.01;
+            // 超极速键盘指令实时映射
+            if (keys['w']) flightState.pitch -= 0.05;
+            if (keys['s']) flightState.pitch += 0.05;
+            if (keys['a']) { flightState.roll += 0.07; flightState.yaw += 0.03; }
+            if (keys['d']) { flightState.roll -= 0.07; flightState.yaw -= 0.03; }
+            if (keys[' ']) flightState.vz -= 0.04;
 
-            // 自动前向推进与阻力衰减
-            flightState.pitch *= 0.95;
-            flightState.roll *= 0.95;
+            flightState.pitch *= 0.92;
+            flightState.roll *= 0.92;
+            flightState.yaw *= 0.90;
+
+            if (flightState.vz > -1.0) flightState.vz = -1.0;
+            if (flightState.vz < -3.5) flightState.vz = -3.5;
 
             flightState.z += flightState.vz;
-            flightState.x += flightState.roll * 0.2;
-            flightState.y -= flightState.pitch * 0.2;
+            flightState.x += flightState.roll * 0.5;
+            flightState.y -= flightState.pitch * 0.5;
 
-            // 约束边界
             if (flightState.y < 0.5) flightState.y = 0.5;
-            if (flightState.y > 10) flightState.y = 10;
+            if (flightState.y > 16) flightState.y = 16;
 
-            // 更新 3D 机身位置与姿态
             drone.position.set(flightState.x, flightState.y, flightState.z);
             drone.rotation.x = flightState.pitch;
             drone.rotation.z = flightState.roll;
-            drone.rotation.y = 0;
+            drone.rotation.y = flightState.yaw;
 
-            // 摄像机第三人称跟随视角
-            camera.position.set(flightState.x, flightState.y + 1.8, flightState.z + 4.5);
-            camera.lookAt(flightState.x, flightState.y, flightState.z - 5);
+            camera.position.set(flightState.x, flightState.y + 1.5, flightState.z + 4.0);
+            camera.lookAt(flightState.x, flightState.y, flightState.z - 6);
 
-            // 航线门穿越检测
-            if (currentGateIndex < gates.length) {
-                let targetGate = gates[currentGateIndex];
+            if (gates.length > 0) {
+                let targetGate = gates[0];
                 let dist = drone.position.distanceTo(targetGate.position);
 
-                if (dist < 3.5) {
-                    currentGateIndex++;
-                    targetGate.material.color.set(0x0071e3); // 穿越后变蓝
-                    document.getElementById('hud-gate').innerText = `航线: ${currentGateIndex} / 5`;
-                    if (currentGateIndex >= 5) {
-                        document.getElementById('hud-status').innerText = '状态: 完美完成所有 3D 航线穿梭！';
+                if (dist < 4.0) {
+                    totalPassed++;
+                    missedCount = 0;
+                    document.getElementById('hud-score').innerText = `连续穿越: ${totalPassed}`;
+
+                    scene.remove(targetGate);
+                    gates.shift();
+                    createNextGate();
+                }
+                else if (drone.position.z < targetGate.position.z - 3) {
+                    missedCount++;
+                    scene.remove(targetGate);
+                    gates.shift();
+                    createNextGate();
+
+                    if (missedCount >= 3) {
+                        endGame();
+                        return;
                     }
                 }
             }
 
-            document.getElementById('hud-speed').innerText = `速度: ${Math.round(Math.abs(flightState.vz) * 40)} km/h`;
+            document.getElementById('hud-speed').innerText = `超极速: ${Math.round(Math.abs(flightState.vz) * 100)} km/h`;
 
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
+        }
+
+        function createNextGate() {
+            const lastGate = gates[gates.length - 1];
+            const gateGeo = new THREE.TorusGeometry(3.5, 0.25, 16, 100);
+            const gateMat = new THREE.MeshBasicMaterial({ color: 0x34c759 });
+            const newGate = new THREE.Mesh(gateGeo, gateMat);
+
+            let nextX = lastGate.position.x + (Math.random() - 0.5) * 22;
+            let nextY = lastGate.position.y + (Math.random() - 0.5) * 12;
+            if (nextY < 1) nextY = 1;
+            if (nextY > 15) nextY = 15;
+            let nextZ = lastGate.position.z - 22;
+
+            newGate.position.set(nextX, nextY, nextZ);
+            newGate.rotation.y = (Math.random() - 0.5) * 1.1;
+            newGate.rotation.x = (Math.random() - 0.5) * 0.7;
+
+            scene.add(newGate);
+            gates.push(newGate);
+        }
+
+        function endGame() {
+            isRunning = false;
+            const screen = document.getElementById('start-screen');
+            const title = document.getElementById('screen-title');
+            const desc = document.getElementById('screen-desc');
+            const btn = document.getElementById('start-action-btn');
+
+            screen.style.display = 'flex';
+            title.innerText = `❌ 超极速航线挑战结束`;
+            desc.innerText = `您在极速状态下成功连续穿越了 ${totalPassed} 个空间障碍门。`;
+            btn.innerText = '再次挑战超极速';
         }
     </script>
 </body>
