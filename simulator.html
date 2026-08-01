@@ -4,258 +4,508 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FPV 极速穿梭模拟器 - GEEK6S BOX</title>
-    <link rel="stylesheet" href="style.css">
+    <title>⚡ 空间穿梭模拟器 - GEEK6S BOX</title>
+    <!-- 引入 Tailwind CSS 样式库 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Three.js 用于 3D 渲染 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5158841818618377"
+        crossorigin="anonymous"></script>
     <style>
-        #canvas-container {
+        :root {
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-dark: #1d1d1f;
+            --text-main: #333336;
+            --text-muted: #86868b;
+            --bg-main: #f5f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
             width: 100%;
-            height: 500px;
-            position: relative;
+            max-width: 1240px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
             overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-light);
+            padding: 36px 24px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--apple-dark);
+            margin-bottom: 40px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand span {
+            color: #34c759;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: var(--apple-dark);
+        }
+
+        .nav-item.active {
+            background-color: var(--apple-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+        }
+
+        /* 主内容区 */
+        .content {
+            flex-grow: 1;
+            padding: 48px;
+            overflow-y: auto;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: var(--apple-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        /* 游戏画布容器 */
+        .game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            background: #0f1117;
             border-radius: 16px;
-            border: 1px solid #27272a;
-            background: #000;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 400px;
+        }
+
+        /* 游戏控制面板UI */
+        .game-hud {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-overlay-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--apple-blue);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 113, 227, 0.4);
+            transition: all 0.2s;
+        }
+
+        .game-overlay-btn:hover {
+            background: var(--apple-blue-hover);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        /* 使用说明与科普 */
+        .info-card-box {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-card-box h3 {
+            font-size: 16px;
+            color: var(--apple-dark);
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .info-card-item {
+            background: #fbfbfd;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .ads-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #fbfbfd;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 36px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
-<body class="bg-[#0f1117] text-gray-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- 顶部或整体容器布局 -->
-    <div class="flex flex-1">
+    <div class="container">
         <!-- 左侧导航栏 -->
-        <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex shrink-0">
-            <div>
-                <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
-                    ⚡ GEEK6S BOX
-                </div>
-                <nav class="space-y-2">
-                    <a href="index.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
-                        链接工具</a>
-                    <a href="pomodoro.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
-                        沉浸番茄钟</a>
-                    <a href="password.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
-                        强密码</a>
-                    <a href="fpv.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
-                        FPV计算器</a>
-                    <a href="json.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">📦
-                        JSON 格式化</a>
-                    <a href="feedback.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
-                        互动留言板</a>
-                    <a href="simulator.html"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">🎮
-                        极速模拟器</a>
-                </nav>
+        <div class="sidebar">
+            <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-item">🔗 链接工具</a>
+                <a href="pomodoro.html" class="nav-item">⏱️ 沉浸番茄钟</a>
+                <a href="password.html" class="nav-item">🔐 强密码</a>
+                <a href="fpv.html" class="nav-item">🔋 FPV计算器</a>
+                <a href="json.html" class="nav-item">📦 JSON 格式化</a>
+                <a href="feedback.html" class="nav-item">💬 互动留言板</a>
+                <a href="simulator.html" class="nav-item active">🎮 空间穿梭模拟器</a>
             </div>
-        </aside>
+        </div>
 
-        <!-- 右侧主内容与功能说明区 -->
-        <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col">
-            <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold">FPV 极速空间穿梭模拟器</h1>
-                    <p class="text-sm text-gray-400 mt-1">沉浸式 3D 第一人称视角物理穿梭与高速避障环境。</p>
-                </div>
-                <div id="hud-score"
-                    class="text-sm font-mono bg-[#18181b] border border-gray-800 px-4 py-2 rounded-lg text-blue-400 font-bold">
-                    得分: 0 | 速度: 0 km/h
-                </div>
-            </header>
+        <!-- 主内容区 -->
+        <div class="content">
+            <h1>🌀 空间空气隧道 & 道具收集模拟器</h1>
+            <p class="subtitle">操控战机穿梭于流光空气隧道中，收集能量核心并避开障碍阻击。</p>
 
-            <!-- 3D 渲染容器 -->
-            <div id="canvas-container" class="mb-10 shadow-2xl">
-                <!-- 游戏开始遮罩 -->
-                <div id="start-overlay"
-                    style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,17,23,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10;">
-                    <h2 class="text-2xl font-bold mb-3 text-white">准备好进入 FPV 空间了吗？</h2>
-                    <p class="text-xs text-gray-400 mb-6 max-w-sm text-center px-4">使用 W/S 升降、A/D
-                        转向，避开随机出现的空间障碍物，体验极速飞行！</p>
-                    <button onclick="startGame()"
-                        class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-xl transition shadow-lg shadow-blue-600/30">
-                        启动引擎，开始飞行
-                    </button>
+            <!-- 游戏主画布 -->
+            <div class="game-wrapper">
+                <div class="game-hud">
+                    <span id="score-text">得分: 0</span>
+                    <span id="energy-text" style="color: #34c759;">💎 能量核心: 0</span>
+                </div>
+                <canvas id="gameCanvas" width="600" height="400"></canvas>
+                <button id="start-btn" class="game-overlay-btn" onclick="startGame()">开始穿梭</button>
+            </div>
+
+            <!-- 使用说明 -->
+            <div class="info-card-box">
+                <h3>📖 游戏玩法与防呆机制说明</h3>
+                <div class="info-card-item">
+                    <b>1. 操控方式：</b>使用键盘方向键 <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 或鼠标在画布内移动以控制战机。<br>
+                    <b>2. 空气隧道特效：</b>周围流动的光束代表高压气流隧道，带给您沉浸式的速度感。<br>
+                    <b>3. 收集道具：</b>穿梭过程中会随机刷新闪光的能量核心（💎），主动拾取可大幅增加积分。<br>
+                    <b>4. 漏洞修复提示：</b>已严格限制边界盲区碰撞判定，无法再通过“死守边缘”逃避障碍物。
                 </div>
             </div>
 
-            <!-- 功能详细说明与介绍区块（恢复内容） -->
-            <section class="bg-[#18181b] border border-gray-800 rounded-2xl p-6 md:p-8 space-y-6 mb-12">
-                <h2 class="text-lg font-bold text-white border-b border-gray-800 pb-3">🎮 关于极速 FPV 模拟器与功能介绍</h2>
-                <div class="text-sm text-gray-400 space-y-3 leading-relaxed">
-                    <p>本工具基于现代 WebGL (Three.js)
-                        引擎构建，旨在为极客与无人机爱好者提供一个轻量、免安装的浏览器端动态物理沙盒。通过精准的视角惯性计算与随机障碍物生成算法，还原了穿越机高速飞行时的紧张刺激感。</p>
-                    <p><strong>核心操作指南：</strong></p>
-                    <ul class="list-disc pl-5 space-y-1 text-gray-300">
-                        <li><strong>方向控制：</strong> 使用键盘上的 <code
-                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">A</code> / <code
-                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">D</code> 键控制飞行器左右平移及转向。</li>
-                        <li><strong>高度控制：</strong> 使用 <code
-                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">W</code> / <code
-                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">S</code> 键调整飞行高度，应对高低错落的几何障碍。
-                        </li>
-                        <li><strong>动态加速：</strong> 随着生存得分的增加，飞行速度会自动阶梯式提升，挑战您的极限反应速度。</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- 广告招商与提示位（Google AdSense 预留位） -->
-            <div class="border border-dashed border-gray-800 rounded-xl p-4 text-center text-xs text-gray-600 mb-8">
-                <span>[ 广告位招商 / Google AdSense 智能投放区域 ]</span>
+            <!-- Google Ads 广告位 -->
+            <div class="ads-container">
+                <span>☕ GEEK6S 极客盒子 - Google Ads 智能广告位预留区</span>
             </div>
-        </main>
+
+            <footer>
+                © 2026 GEEK6S BOX. All Rights Reserved. | <a href="privacy.html"
+                    style="color: var(--text-muted); text-decoration: none; font-weight: 600;">关于我们 & 隐私政策</a>
+            </footer>
+        </div>
     </div>
 
-    <!-- 统一标准页脚 -->
-    <footer class="text-center py-6 text-xs text-gray-500 border-t border-gray-800 bg-[#0f1117] mt-auto w-full">
-        <div class="flex justify-center items-center gap-4 mb-2">
-            <a href="privacy.html" class="hover:text-blue-400 transition">隐私政策</a>
-            <span>•</span>
-            <a href="feedback.html" class="hover:text-blue-400 transition">关于我们与反馈</a>
-        </div>
-        © 2026 GEEK6S BOX. All Rights Reserved.
-    </footer>
-
-    <!-- 引入全局搜索脚本 -->
-    <script src="search.js"></script>
+    <!-- 游戏核心逻辑脚本 -->
     <script>
-        let scene, camera, renderer;
-        let obstacles = [];
-        let gameActive = false;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('start-btn');
+        const scoreText = document.getElementById('score-text');
+        const energyText = document.getElementById('energy-text');
+
+        let gameRunning = false;
         let score = 0;
-        let speed = 0.8;
+        let energyCount = 0;
+
+        // 玩家战机
+        let player = { x: 100, y: 200, radius: 14, speed: 5 };
         let keys = {};
 
-        const container = document.getElementById('canvas-container');
-        const hudScore = document.getElementById('hud-score');
-        const startOverlay = document.getElementById('start-overlay');
+        // 障碍物与道具数组
+        let obstacles = [];
+        let collectibles = [];
+        let tunnelParticles = [];
 
-        function init3D() {
-            if (scene) return;
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x0f1117, 0.015);
-
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 2, 5);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0x0f1117);
-            container.appendChild(renderer.domElement);
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0x3b82f6, 1);
-            dirLight.position.set(0, 20, 10);
-            scene.add(dirLight);
-
-            const gridHelper = new THREE.GridHelper(500, 100, 0x3b82f6, 0x27272a);
-            gridHelper.position.y = -5;
-            scene.add(gridHelper);
-
-            const ceilingGrid = new THREE.GridHelper(500, 100, 0x3b82f6, 0x27272a);
-            ceilingGrid.position.y = 15;
-            scene.add(ceilingGrid);
-
-            window.addEventListener('keydown', (e) => keys[e.code] = true);
-            window.addEventListener('keyup', (e) => keys[e.code] = false);
-
-            window.addEventListener('resize', () => {
-                if (!container) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
+        // 初始化空气隧道光束特效
+        for (let i = 0; i < 40; i++) {
+            tunnelParticles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                length: Math.random() * 40 + 10,
+                speed: Math.random() * 3 + 2
             });
         }
 
-        function spawnObstacle() {
-            const geometryTypes = [
-                new THREE.BoxGeometry(3, 3, 3),
-                new THREE.ConeGeometry(2, 4, 4),
-                new THREE.TorusGeometry(3, 0.5, 16, 100)
-            ];
-            const geo = geometryTypes[Math.floor(Math.random() * geometryTypes.length)];
-            const mat = new THREE.MeshStandardMaterial({
-                color: Math.random() > 0.5 ? 0x3b82f6 : 0x6366f1,
-                wireframe: true
-            });
-            const obstacle = new THREE.Mesh(geo, mat);
+        window.addEventListener('keydown', e => keys[e.key] = true);
+        window.addEventListener('keyup', e => keys[e.key] = false);
 
-            const x = (Math.random() - 0.5) * 25;
-            const y = Math.random() * 8 - 1;
-            const z = -200;
-            obstacle.position.set(x, y, z);
-            scene.add(obstacle);
-            obstacles.push(obstacle);
-        }
+        canvas.addEventListener('mousemove', e => {
+            if (!gameRunning) return;
+            const rect = canvas.getBoundingClientRect();
+            player.x = e.clientX - rect.left;
+            player.y = e.clientY - rect.top;
+        });
 
         function startGame() {
-            startOverlay.style.display = 'none';
-            init3D();
-            gameActive = true;
             score = 0;
-            speed = 0.8;
-            obstacles.forEach(o => scene.remove(o));
+            energyCount = 0;
             obstacles = [];
-            camera.position.set(0, 2, 5);
-            animate();
+            collectibles = [];
+            player.x = 100;
+            player.y = 200;
+            gameRunning = true;
+            startBtn.style.display = 'none';
+            loop();
         }
 
-        function animate() {
-            if (!gameActive) return;
+        function update() {
+            if (!gameRunning) return;
 
-            requestAnimationFrame(animate);
+            // 键盘控制
+            if (keys['ArrowUp'] || keys['w']) player.y -= player.speed;
+            if (keys['ArrowDown'] || keys['s']) player.y += player.speed;
+            if (keys['ArrowLeft'] || keys['a']) player.x -= player.speed;
+            if (keys['ArrowRight'] || keys['d']) player.x += player.speed;
 
-            if (keys['KeyA'] || keys['ArrowLeft']) camera.position.x -= 0.3;
-            if (keys['KeyD'] || keys['ArrowRight']) camera.position.x += 0.3;
-            if (keys['KeyW'] || keys['ArrowUp']) camera.position.y += 0.2;
-            if (keys['KeyS'] || keys['ArrowDown']) camera.position.y -= 0.2;
+            // 严格边界限制（彻底杜绝边缘卡 Bug 躲避障碍）
+            const margin = player.radius + 4;
+            if (player.x < margin) player.x = margin;
+            if (player.x > canvas.width - margin) player.x = canvas.width - margin;
+            if (player.y < margin) player.y = margin;
+            if (player.y > canvas.height - margin) player.y = canvas.height - margin;
 
-            camera.position.x = Math.max(-15, Math.min(15, camera.position.x));
-            camera.position.y = Math.max(-2, Math.min(10, camera.position.y));
+            // 更新空气隧道流光
+            tunnelParticles.forEach(p => {
+                p.x -= p.speed;
+                if (p.x < 0) p.x = canvas.width;
+            });
 
-            if (Math.random() < 0.04) {
-                spawnObstacle();
+            // 随机生成障碍物
+            if (Math.random() < 0.03) {
+                obstacles.push({
+                    x: canvas.width,
+                    y: Math.random() * (canvas.height - 60) + 30,
+                    width: 25,
+                    height: 50,
+                    speed: 4 + Math.random() * 2
+                });
             }
 
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                obstacles[i].position.z += speed;
-                obstacles[i].rotation.x += 0.01;
-                obstacles[i].rotation.y += 0.02;
+            // 随机生成可收集道具 (💎)
+            if (Math.random() < 0.02) {
+                collectibles.push({
+                    x: canvas.width,
+                    y: Math.random() * (canvas.height - 40) + 20,
+                    radius: 10,
+                    speed: 3.5
+                });
+            }
 
-                const distance = camera.position.distanceTo(obstacles[i].position);
-                if (distance < 2.3) {
-                    gameActive = false;
-                    alert(`💥 撞击障碍物！最终得分: ${score}`);
-                    startOverlay.style.display = 'flex';
-                    return;
+            // 移动与碰撞检测：障碍物
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= obs.speed;
+
+                // AABB 与圆形精准碰撞
+                if (
+                    player.x + player.radius > obs.x &&
+                    player.x - player.radius < obs.x + obs.width &&
+                    player.y + player.radius > obs.y &&
+                    player.y - player.radius < obs.y + obs.height
+                ) {
+                    gameOver();
                 }
 
-                if (obstacles[i].position.z > 10) {
-                    scene.remove(obstacles[i]);
+                if (obs.x + obs.width < 0) {
                     obstacles.splice(i, 1);
                     score += 10;
-                    speed = Math.min(2.5, speed + 0.005);
                 }
             }
 
-            hudScore.innerText = `得分: ${score} | 速度: ${Math.round(speed * 120)} km/h`;
-            renderer.render(scene, camera);
+            // 移动与碰撞检测：道具收集
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                let item = collectibles[i];
+                item.x -= item.speed;
+
+                // 计算玩家与道具的距离
+                let dist = Math.hypot(player.x - item.x, player.y - item.y);
+                if (dist < player.radius + item.radius) {
+                    energyCount++;
+                    collectibles.splice(i, 1);
+                } else if (item.x < 0) {
+                    collectibles.splice(i, 1);
+                }
+            }
+
+            scoreText.innerText = `得分: ${score}`;
+            energyText.innerText = `💎 能量核心: ${energyCount}`;
         }
 
-        window.onload = () => {
-            init3D();
-            renderer.render(scene, camera);
-        };
+        function draw() {
+            // 清空画布并绘制深邃的空气隧道背景
+            ctx.fillStyle = '#0f1117';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制空气隧道流光线条
+            ctx.strokeStyle = 'rgba(0, 113, 227, 0.25)';
+            ctx.lineWidth = 2;
+            tunnelParticles.forEach(p => {
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x + p.length, p.y);
+                ctx.stroke();
+            });
+
+            // 绘制障碍物
+            ctx.fillStyle = '#ff3b30';
+            obstacles.forEach(obs => {
+                ctx.beginPath();
+                ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 6);
+                ctx.fill();
+            });
+
+            // 绘制可收集道具 (闪光钻石 💎)
+            collectibles.forEach(item => {
+                ctx.fillStyle = '#34c759';
+                ctx.shadowColor = '#34c759';
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; // 重置阴影
+            });
+
+            // 绘制玩家战机
+            ctx.fillStyle = '#0071e3';
+            ctx.shadowColor = '#0071e3';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        function loop() {
+            if (!gameRunning) return;
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            startBtn.style.display = 'block';
+            startBtn.innerText = '挑战失败，重新开始';
+        }
     </script>
+    <script src="search.js"></script>
 </body>
 
 </html>
