@@ -237,6 +237,44 @@
             line-height: 1.6;
         }
 
+        /* 广告位样式 */
+        .ad-banner {
+            width: 100%;
+            max-width: 720px;
+            margin-top: 24px;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            border: 1px dashed #0071e3;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--apple-dark);
+        }
+
+        .ad-banner .ad-tag {
+            background: #0071e3;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* 页脚样式 */
+        .site-footer {
+            width: 100%;
+            max-width: 720px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -281,7 +319,7 @@
         <!-- 右侧主内容区 -->
         <div class="content">
             <h1>🌐 3D 超极速 FPV 无限航线穿梭系统</h1>
-            <p class="subtitle">超高极速推进、大角度急弯、多维空间穿越与强制全局键盘焦点捕获。</p>
+            <p class="subtitle">超高极速推进、大角度急弯、多维空间穿越与全局键盘控制。</p>
 
             <!-- 3D 渲染视口容器 -->
             <div class="game-wrapper" id="game-box" tabindex="0">
@@ -302,15 +340,34 @@
                 </div>
             </div>
 
-            <!-- 说明区块 -->
+            <!-- 说明与免责声明区块 -->
             <div class="info-card-box">
-                <h3>📖 键盘强效控制指南</h3>
+                <h3>📖 键盘强效控制与免责说明</h3>
                 <div class="info-card-item">
-                    <b>1. 焦点强制聚焦：</b>启动模拟后，系统会自动将键盘焦点锁定至 3D 视口，按下任意键即可操控。<br>
-                    <b>2. 超高速推进：</b>按住 <kbd>Space</kbd> 爆发推进，配合 <kbd>W</kbd> <kbd>S</kbd> <kbd>A</kbd> <kbd>D</kbd>
-                    进行大角度急弯与高低空间穿梭。
+                    <b>1. 键控指南：</b>使用 <kbd>W</kbd> <kbd>S</kbd> 控制俯仰，<kbd>A</kbd> <kbd>D</kbd> 控制左右急弯，长按
+                    <kbd>Space</kbd> 爆发极速推进。<br>
+                    <b>2. 免责说明：</b>本模拟系统仅供 FPV
+                    飞行爱好者进行线上操控训练、视觉反应测试及技术交流使用。模拟器中的物理加速度与视觉反馈经过艺术化处理，不代表真实物理世界的飞行器性能。请遵守当地法律法规，切勿将模拟经验盲目套用于现实危险操作。
                 </div>
             </div>
+
+            <!-- 广告位 -->
+            <div class="ad-banner">
+                <div>
+                    <span class="ad-tag">赞助商广告</span>
+                    <span style="font-size: 13px; font-weight: 500; margin-left: 8px;">GEEK6S FPV
+                        穿越机专业硬件与图传套件特惠上线！</span>
+                </div>
+                <a href="#"
+                    style="font-size: 13px; color: var(--apple-blue); font-weight: 600; text-decoration: none;">了解详情
+                    &rarr;</a>
+            </div>
+
+            <!-- 页脚 -->
+            <footer class="site-footer">
+                <p>&copy; 2026 GEEK6S BOX. All Rights Reserved.</p>
+                <p>Designed with WebGL & Three.js for Ultimate 3D FPV Experience.</p>
+            </footer>
         </div>
     </div>
 
@@ -333,7 +390,6 @@
         function initSimulation() {
             document.getElementById('start-screen').style.display = 'none';
 
-            // 强制将焦点赋予游戏容器，确保键盘事件 100% 触发
             const gameBox = document.getElementById('game-box');
             gameBox.focus();
 
@@ -400,7 +456,6 @@
             drone = new THREE.Mesh(droneGeo, droneMat);
             scene.add(drone);
 
-            // 全局和元素级双重键盘侦听绑定
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
             window.addEventListener('keydown', handleKeyDown, true);
@@ -416,7 +471,7 @@
             if (['w', 's', 'a', 'd', ' '].includes(k) || e.code === 'Space') {
                 keys[k] = true;
                 keys[' '] = keys[' '] || (e.code === 'Space');
-                e.preventDefault(); // 阻止页面默认滚动
+                e.preventDefault();
             }
         }
 
@@ -431,7 +486,6 @@
         function animate() {
             if (!isRunning) return;
 
-            // 超极速键盘指令实时映射
             if (keys['w']) flightState.pitch -= 0.05;
             if (keys['s']) flightState.pitch += 0.05;
             if (keys['a']) { flightState.roll += 0.07; flightState.yaw += 0.03; }
