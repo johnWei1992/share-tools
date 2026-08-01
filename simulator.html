@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极速模拟器 - GEEK6S BOX</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0f1117] text-gray-100 min-h-screen flex">
+
+    <!-- 左侧导航栏 -->
+    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
+                ⚡ GEEK6S BOX
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
+                    链接工具</a>
+                <a href="pomodoro.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
+                    沉浸番茄钟</a>
+                <a href="password.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
+                    强密码</a>
+                <a href="fpv.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
+                    FPV计算器</a>
+                <a href="json.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">📦
+                    JSON 格式化</a>
+                <a href="feedback.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
+                    互动留言板</a>
+                <a href="simulator.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">🎮
+                    极速模拟器</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col h-screen">
+        <header class="mb-6">
+            <h1 class="text-2xl font-bold">极速在线模拟器</h1>
+            <p class="text-sm text-gray-400 mt-1">高性能本地沙盒与硬件/物理效果模拟环境。</p>
+        </header>
+
+        <!-- 模拟器主体容器 -->
+        <div
+            class="flex-1 bg-[#18181b] border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center text-center shadow-xl space-y-4">
+            <div class="text-5xl">🚀</div>
+            <h2 class="text-xl font-semibold text-white">模拟器环境准备就绪</h2>
+            <p class="text-sm text-gray-400 max-w-md">
+                当前沙盒运行正常。您可以在此集成各类 WebGL 物理引擎、电路模拟或复古游戏机核心。
+            </p>
+            <div class="pt-4">
+                <button onclick="alert('模拟器内核已启动！')"
+                    class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 font-medium rounded-lg transition text-white shadow-lg shadow-blue-600/20">
+                    初始化核心引擎
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 引入全局搜索脚本 -->
+    <script src="search.js"></script>
+</body>
+
+</html>
