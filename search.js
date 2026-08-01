@@ -1,27 +1,36 @@
-// 全局搜索组件与逻辑（含移动端优化）
+// 全局搜索组件与逻辑（含右上角常驻输入框与移动端优化）
 (function () {
-    // 注入搜索弹窗及移动端悬浮按钮的 HTML 结构
-    const modalHTML = `
+    // 1. 自动在页面右上角注入常驻搜索栏和弹窗结构
+    const injectedHTML = `
+    <!-- PC端右上角常驻搜索栏提示 -->
+    <div id="desktop-search-trigger" onclick="openSearch()" style="position:fixed; top:20px; right:24px; background:#18181b; border:1px solid #27272a; border-radius:8px; padding:8px 12px; display:flex; align-items:center; gap:8px; cursor:pointer; z-index:998; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:border-color 0.2s;" onmouseover="this.style.borderColor='#3f3f46'" onmouseout="this.style.borderColor='#27272a'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span style="font-size:13px; color:#a1a1aa; font-family:inherit;">搜索工具...</span>
+        <span style="font-size:11px; color:#71717a; background:#27272a; padding:2px 6px; border-radius:4px; font-family:monospace;">Cmd + K</span>
+    </div>
+
     <!-- 移动端悬浮搜索按钮 -->
     <div id="mobile-search-fab" style="display:none; position:fixed; bottom:24px; right:24px; width:50px; height:50px; background:#27272a; border:1px solid #3f3f46; border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.5); z-index:9998; justify-content:center; align-items:center; cursor:pointer;" onclick="openSearch()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     </div>
 
     <!-- 全局搜索弹窗 -->
-    <div id="global-search-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); justify-content:center; align-items:flex-start; padding-top:10vh; z-index:9999; box-sizing:border-box; padding-left:16px; padding-right:16px;">
+    <div id="global-search-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); justify-content:center; align-items:flex-start; padding-top:12vh; z-index:9999; box-sizing:border-box; padding-left:16px; padding-right:16px;">
         <div style="width:100%; max-width:600px; background:#18181b; border:1px solid #27272a; border-radius:12px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.5); overflow:hidden; color:#f4f4f5; font-family:inherit;">
             <div style="display:flex; align-items:center; border-bottom:1px solid #27272a; padding-right:16px;">
-                <input type="text" id="global-search-input" placeholder="搜索工具（番茄钟、密码、FPV...）" autocomplete="off" style="width:100%; padding:16px; background:transparent; border:none; outline:none; color:#fff; font-size:16px;">
-                <span onclick="closeSearch()" style="font-size:12px; color:#a1a1aa; background:#27272a; padding:4px 8px; border-radius:4px; cursor:pointer;">关闭</span>
+                <input type="text" id="global-search-input" placeholder="输入关键词搜索工具..." autocomplete="off" style="width:100%; padding:16px; background:transparent; border:none; outline:none; color:#fff; font-size:16px;">
+                <span onclick="closeSearch()" style="font-size:12px; color:#a1a1aa; background:#27272a; padding:4px 8px; border-radius:4px; cursor:pointer;">ESC</span>
             </div>
             <div id="search-results-list" style="max-height:50vh; overflow-y:auto; padding:8px;"></div>
         </div>
     </div>`;
 
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.body.insertAdjacentHTML('beforeend', injectedHTML);
 
-    // 检测是否为移动端设备，如果是则显示右下角悬浮搜索按钮
+    // 适配移动端：小屏幕时隐藏右上角常驻栏，显示右下角悬浮按钮
     if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+        const desktopTrigger = document.getElementById('desktop-search-trigger');
+        if (desktopTrigger) desktopTrigger.style.display = 'none';
         document.getElementById('mobile-search-fab').style.display = 'flex';
     }
 
@@ -29,9 +38,9 @@
     const sitePages = [
         { title: "链接工具", url: "index.html", desc: "常用网站与开发导航" },
         { title: "沉浸番茄钟", url: "pomodoro.html", desc: "高效专注时间管理" },
-        { title: "互动留言板", url: "feedback.html", desc: "留下你的意见和反馈" },
+        { title: "强密码生成器", url: "password.html", desc: "生成军工级高强度安全密码" },
         { title: "FPV 计算器", url: "fpv.html", desc: "无人机参数与物理计算" },
-        { title: "隐私政策", url: "privacy.html", desc: "网站隐私说明" }
+        { title: "互动留言板", url: "feedback.html", desc: "留下你的意见和反馈" }
     ];
 
     const searchModal = document.getElementById('global-search-modal');
@@ -54,7 +63,7 @@
         searchModal.style.display = 'flex';
         searchInput.value = '';
         renderResults(sitePages);
-        setTimeout(() => searchInput.focus(), 50); // 延迟聚焦防键盘弹起冲突
+        setTimeout(() => searchInput.focus(), 50);
     }
 
     window.closeSearch = function () {
