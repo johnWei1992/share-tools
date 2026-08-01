@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 格式化工具 - GEEK6S BOX</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0f1117] text-gray-100 min-h-screen flex">
+
+    <!-- 左侧导航栏 -->
+    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
+                ⚡ GEEK6S BOX
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
+                    链接工具</a>
+                <a href="pomodoro.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
+                    沉浸番茄钟</a>
+                <a href="password.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
+                    强密码</a>
+                <a href="fpv.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
+                    FPV计算器</a>
+                <a href="json.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">📦
+                    JSON 格式化</a>
+                <a href="feedback.html"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
+                    互动留言板</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col h-screen">
+        <header class="mb-6">
+            <h1 class="text-2xl font-bold">JSON 格式化与语法校验</h1>
+            <p class="text-sm text-gray-400 mt-1">在线解析、格式化美化及压缩 JSON 数据。</p>
+        </header>
+
+        <!-- 操作按钮栏 -->
+        <div class="flex gap-3 mb-4">
+            <button onclick="formatJSON(2)"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-sm font-medium rounded-lg transition text-white">格式化
+                (2空格)</button>
+            <button onclick="compressJSON()"
+                class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-sm font-medium rounded-lg transition text-gray-300">压缩
+                / 去空格</button>
+            <button onclick="clearJSON()"
+                class="px-4 py-2 bg-red-900/40 hover:bg-red-900/60 text-sm font-medium rounded-lg transition text-red-300">清空</button>
+            <span id="status-tip" class="self-center text-xs text-gray-400 ml-auto"></span>
+        </div>
+
+        <!-- 编辑器区域 -->
+        <div class="flex-1 pb-10">
+            <textarea id="json-input" placeholder="在此粘贴您的 JSON 字符串..."
+                class="w-full h-full bg-[#18181b] border border-gray-800 rounded-xl p-4 text-mono text-sm text-gray-200 outline-none resize-none focus:border-blue-600 transition font-mono"></textarea>
+        </div>
+    </main>
+
+    <!-- 引入全局搜索脚本 -->
+    <script src="search.js"></script>
+    <script>
+        const inputArea = document.getElementById('json-input');
+        const statusTip = document.getElementById('status-tip');
+
+        function formatJSON(indent) {
+            try {
+                const val = inputArea.value.trim();
+                if (!val) return;
+                const jsonObj = JSON.parse(val);
+                inputArea.value = JSON.stringify(jsonObj, null, indent);
+                statusTip.innerText = "✅ JSON 格式化成功";
+                statusTip.className = "self-center text-xs text-green-400 ml-auto";
+            } catch (e) {
+                statusTip.innerText = "❌ JSON 语法错误: " + e.message;
+                statusTip.className = "self-center text-xs text-red-400 ml-auto";
+            }
+        }
+
+        function compressJSON() {
+            try {
+                const val = inputArea.value.trim();
+                if (!val) return;
+                const jsonObj = JSON.parse(val);
+                inputArea.value = JSON.stringify(jsonObj);
+                statusTip.innerText = "✅ JSON 压缩成功";
+                statusTip.className = "self-center text-xs text-green-400 ml-auto";
+            } catch (e) {
+                statusTip.innerText = "❌ JSON 语法错误: " + e.message;
+                statusTip.className = "self-center text-xs text-red-400 ml-auto";
+            }
+        }
+
+        function clearJSON() {
+            inputArea.value = '';
+            statusTip.innerText = '';
+        }
+    </script>
+</body>
+
+</html>

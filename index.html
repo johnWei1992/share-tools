@@ -440,43 +440,6 @@
                 <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
             </div>
 
-            <!-- 3. 强密码卡片 -->
-            <div class="tool-card" id="password-card">
-                <h1>🚀 本地随机强密码生成器</h1>
-                <p class="subtitle">基于浏览器原生安全随机数，生成绝不上传服务器的高强度密码。</p>
-                <div class="input-area-group">
-                    <div class="input-label">密码长度</div>
-                    <div class="input-box-wrapper"><input type="number" id="pwd-len" value="16"></div>
-                </div>
-                <button class="action-submit-btn" onclick="generateSecurePassword()">瞬间生成安全密码</button>
-                <div class="result-display-panel" id="password-result"
-                    style="font-family:ui-monospace, monospace; font-size:15px; font-weight: 500;">
-                    点击按钮生成</div>
-
-                <div
-                    style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 24px;">
-                    <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡
-                        现代密码安全学与密码熵（Entropy）</h3>
-                    <div
-                        style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1.
-                                什么是密码熵？长度为什么比复杂性更重要？</strong>
-                            密码熵公式为 E = L \times \log_2(R)（L 为长度，R 为字符集）。这意味着增加长度（L）对提升强度的效果呈指数级增加，远超单纯添加特殊符号。一个
-                            16 位纯数字密码，其抗暴力破译能力往往远超 8 位复杂密码。
-                        </div>
-                        <div
-                            style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                            <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
-                                真随机数（CSPRNG）与普通伪随机数</strong>
-                            本工具采用原生 `crypto.getRandomValues()` 算法。它引入操作系统底层的硬件熵源（如 CPU
-                            抖动、热噪声等），具备绝对的不可预测性，确保密码达到军事级防御强度。
-                        </div>
-                    </div>
-                </div>
-                <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
-            </div>
 
             <!-- 4. FPV计算器卡片（内置跨页联动数据引擎） -->
             <div class="tool-card" id="fpv-card">

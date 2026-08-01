@@ -39,6 +39,7 @@
         { title: "链接工具", url: "index.html", desc: "常用网站与开发导航" },
         { title: "沉浸番茄钟", url: "pomodoro.html", desc: "高效专注时间管理" },
         { title: "强密码生成器", url: "password.html", desc: "生成军工级高强度安全密码" },
+        { title: "JSON 格式化", url: "json.html", desc: "在线 JSON 美化、校验与压缩" },
         { title: "FPV 计算器", url: "fpv.html", desc: "无人机参数与物理计算" },
         { title: "互动留言板", url: "feedback.html", desc: "留下你的意见和反馈" }
     ];
