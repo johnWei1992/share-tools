@@ -9,6 +9,7 @@
     <style>
         :root {
             --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
             --apple-dark: #1d1d1f;
             --text-main: #333336;
             --text-muted: #86868b;
@@ -101,6 +102,11 @@
             color: white !important;
             justify-content: center;
             font-weight: 600;
+            text-align: center;
+        }
+
+        .btn-simulator:hover {
+            background: #333336 !important;
         }
 
         .content {
@@ -164,6 +170,11 @@
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+            transition: all 0.2s;
+        }
+
+        .action-submit-btn:hover {
+            background-color: var(--apple-blue-hover);
         }
 
         .result-display-panel {
@@ -175,11 +186,23 @@
             font-size: 14px;
             color: var(--text-muted);
         }
+
+        .ads-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fbfbfd;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- 左侧导航栏 -->
         <div class="sidebar">
             <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
             <div class="nav-menu">
@@ -192,9 +215,12 @@
                 <a href="simulator.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
             </div>
         </div>
+
+        <!-- 右侧主内容区 -->
         <div class="content">
             <h1>🔋 FPV 航模物理参数推演箱</h1>
             <p class="subtitle">精准计算整机推重比、理论续航与电池起飞压降，拒绝盲目炸机。</p>
+
             <div class="fpv-grid-layout">
                 <div class="input-area-group">
                     <div class="input-label">电池起飞电压 (V)</div>
@@ -219,26 +245,59 @@
                     <div class="input-box-wrapper"><input type="number" id="fpv-mah" value="1300"></div>
                 </div>
             </div>
+
             <button class="action-submit-btn" onclick="calculateFpvPhysics()">启动多维数据推演</button>
-            <div class="result-display-panel" id="fpv-result">点击按钮启动多维参数物理推演...</div>
+            <div class="result-display-panel" id="fpv-result" style="text-align:left; justify-content:flex-start;">
+                点击按钮启动多维参数物理推演...</div>
+
+            <!-- 优秀的科普说明区块 -->
+            <div
+                style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 32px;">
+                <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡 FPV
+                    无人机空气动力学与电学公式科普</h3>
+                <div
+                    style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
+                    <div
+                        style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
+                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 推重比
+                            (Thrust-to-Weight Ratio) 与特技飞行</strong>
+                        推重比公式为 TWR = 总推力 / 总重量。在 FPV 花飞中，标准的 6S 动力通常能带来高达 6:1 甚至 8:1 以上的暴力推重比，为高空甩尾或极限拉起提供充足的惯性支撑。
+                    </div>
+                    <div
+                        style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
+                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
+                            悬停电流与理论续航推演</strong>
+                        理论悬停时间基于欧姆定律及电量守恒转换。本工具采用空气动力学经验公式，精准预测全机在全载重下的悬停基准耗竭曲线。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 广告容器 -->
+            <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
         </div>
     </div>
+
     <script>
         function calculateFpvPhysics() {
             const voltage = parseFloat(document.getElementById('fpv-voltage').value);
             const weight = parseFloat(document.getElementById('fpv-weight').value);
             const thrust = parseFloat(document.getElementById('fpv-thrust').value);
             const mah = parseFloat(document.getElementById('fpv-mah').value);
+
             if (!weight || !thrust || !mah) { alert('请填写完整的物理参数！'); return; }
+
             const totalThrust = thrust * 4;
             const twr = totalThrust / weight;
             const hoverCurrent = (weight / 100) * 4.5;
             const minutes = (mah / 1000) / hoverCurrent * 60;
+
             document.getElementById('fpv-result').innerHTML = `
-                🚀 <b>多维推演报告已就绪：</b><br>
-                • 💥 <b>全机整机推重比：</b> <span style="color:#34c759; font-weight:bold;">${twr.toFixed(2)} : 1</span><br>
-                • 🕒 <b>理论极限悬停时间：</b> 约 ${minutes.toFixed(1)} 分钟<br>
-                • ⚡ <b>电池起飞基准电压：</b> ${voltage}V 运行正常
+                <div style="line-height:1.8;">
+                    🚀 <b>多维推演报告已就绪：</b><br>
+                    • 💥 <b>全机整机推重比：</b> <span style="color:#34c759; font-weight:bold;">${twr.toFixed(2)} : 1</span> ${twr >= 6 ? ' (🔥 符合 6S 极速暴力花飞标准)' : ' (⚠️ 动力偏温和)'}<br>
+                    • 🕒 <b>理论极限悬停时间：</b> 约 ${minutes.toFixed(1)} 分钟<br>
+                    • ⚡ <b>电池起飞基准电压：</b> ${voltage}V 运行正常
+                </div>
             `;
         }
     </script>
