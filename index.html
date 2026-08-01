@@ -19,6 +19,8 @@
             --bg-main: #f5f5f7;
             --card-bg: #ffffff;
             --border-light: rgba(0, 0, 0, 0.06);
+            --input-bg: #fbfbfd;
+            --input-border: #d2d2d7;
         }
 
         * {
@@ -49,14 +51,14 @@
             border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
-        /* 侧边栏样式 - 苹果毛玻璃微调风格 */
+        /* 侧边栏样式 - 苹果风微调 */
         .sidebar {
             width: 280px;
             border-right: 1px solid var(--border-light);
             padding: 36px 24px;
             display: flex;
             flex-direction: column;
-            background: #fafafa;
+            background: #fafafc;
             flex-shrink: 0;
         }
 
@@ -121,7 +123,7 @@
             flex-grow: 1;
             padding: 48px;
             overflow-y: auto;
-            background: #ffffff;
+            background: var(--card-bg);
         }
 
         h1 {
@@ -138,7 +140,38 @@
             margin-bottom: 32px;
         }
 
-        /* 通用表单与布局 */
+        /* 选项卡样式 */
+        .tab-box-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 28px;
+            gap: 24px;
+        }
+
+        .tab-box-btn {
+            padding: 10px 2px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-box-btn.active {
+            color: var(--apple-blue);
+            border-bottom-color: var(--apple-blue);
+        }
+
+        .tab-panel-content {
+            display: none;
+        }
+
+        .tab-panel-content.active {
+            display: block;
+        }
+
+        /* 表单与输入框 */
         .input-area-group {
             margin-bottom: 24px;
         }
@@ -150,21 +183,15 @@
             margin-bottom: 8px;
         }
 
-        .input-box-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
         .input-box-wrapper input {
             width: 100%;
             padding: 14px 16px;
-            border: 1px solid #d2d2d7;
+            border: 1px solid var(--input-border);
             border-radius: 12px;
             font-size: 14px;
             outline: none;
             transition: all 0.2s ease;
-            background: #fbfbfd;
+            background: var(--input-bg);
             color: var(--apple-dark);
         }
 
@@ -193,43 +220,12 @@
             transform: translateY(-1px);
         }
 
-        /* 选项卡样式 */
-        .tab-box-header {
-            display: flex;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 28px;
-            gap: 24px;
-        }
-
-        .tab-box-btn {
-            padding: 10px 2px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .tab-box-btn.active {
-            color: var(--apple-blue);
-            border-bottom-color: var(--apple-blue);
-        }
-
-        .tab-panel-content {
-            display: none;
-        }
-
-        .tab-panel-content.active {
-            display: block;
-        }
-
         /* 结果展示区 */
         .result-display-panel {
             margin-top: 24px;
             padding: 20px;
-            background-color: #f5f5f7;
-            border: 1px dashed #d2d2d7;
+            background-color: var(--bg-main);
+            border: 1px dashed var(--input-border);
             border-radius: 12px;
             min-height: 100px;
             display: flex;
@@ -237,13 +233,40 @@
             justify-content: center;
             color: var(--text-muted);
             font-size: 14px;
+            text-align: center;
+        }
+
+        /* 统一卡片与信息区块 */
+        .info-card-box {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-card-box h3 {
+            font-size: 15px;
+            color: var(--apple-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card-item {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
         }
 
         /* 广告容器 */
         .ads-container {
             margin-top: 40px;
             padding: 20px;
-            background: #fbfbfd;
+            background: var(--input-bg);
             border: 1px solid var(--border-light);
             border-radius: 12px;
             text-align: center;
@@ -251,7 +274,27 @@
             font-size: 13px;
         }
 
-        /* 手机端响应式适配样式 */
+        /* 统一标准页脚 */
+        footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--apple-blue);
+        }
+
+        /* 移动端适配 */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -299,7 +342,7 @@
 <body>
 
     <div class="container">
-        <!-- 左侧导航栏区域（修复了原代码中漏掉的 sidebar 容器标签与完整的链接项目） -->
+        <!-- 左侧苹果风格导航栏 -->
         <div class="sidebar">
             <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
             <div class="nav-menu">
@@ -347,13 +390,44 @@
             <button class="action-submit-btn" onclick="executeLinkAction()">立即生成</button>
             <div class="result-display-panel" id="link-result">生成后的结果将安全地显示在这里</div>
 
-            <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
+            <!-- 使用说明区块 -->
+            <div class="info-card-box">
+                <h3>📖 链接工具使用指南</h3>
+                <div class="info-card-item">
+                    <b>1. 灵活切换：</b>点击上方标签可在“二维码”、“条形码”与“短网址”工具之间自由切换。<br>
+                    <b>2. 本地执行：</b>所有生成与转换操作均在前端高效响应，确保您的链接隐私与数据安全。
+                </div>
+            </div>
 
-            <!-- 底部声明区域 -->
-            <footer
-                style="margin-top: 48px; border-top: 1px solid var(--border-light); padding-top: 24px; text-align: center; font-size: 12px; color: var(--text-muted);">
-                © 2026 GEEK6S BOX. All Rights Reserved. | <a href="privacy.html"
-                    style="color: var(--text-muted); text-decoration: none; font-weight: 600;">关于我们 & 隐私政策</a>
+            <!-- 技术与科普内容区块 -->
+            <div class="info-card-box" style="margin-top: 24px; border-top: 1px dashed var(--border-light);">
+                <h3>💡 二维码与短链接技术科普</h3>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 二维码纠错机制 (Error
+                        Correction)</strong>
+                    标准二维码内置了 L、M、Q、H 四个等级的纠错能力。这意味着即使二维码表面有高达 30% 的污损或遮挡，扫描设备依然可以被准确识别并还原出原始链接。
+                </div>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
+                        链接重定向与短网址原理</strong>
+                    短网址服务通过 HTTP 301/302 状态码的重定向机制，将精简的短路径毫秒级映射到原始冗长复杂的 URL 目标地址中，极大方便了社交媒体的文本传播。
+                </div>
+            </div>
+
+            <!-- Google Ads 广告预留位 -->
+            <div class="ads-container">
+                <span>☕ GEEK6S 极客盒子 - Google Ads 智能广告位预留区</span>
+            </div>
+
+            <!-- 统一标准页脚 -->
+            <footer>
+                <div
+                    style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="privacy.html">隐私政策</a>
+                    <span>•</span>
+                    <a href="feedback.html">关于我们与反馈</a>
+                </div>
+                © 2026 GEEK6S BOX. All Rights Reserved.
             </footer>
         </div>
     </div>

@@ -16,22 +16,26 @@
             --bg-main: #f5f5f7;
             --card-bg: #ffffff;
             --border-light: rgba(0, 0, 0, 0.06);
+            --input-bg: #fbfbfd;
+            --input-border: #d2d2d7;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
             display: flex;
-            justify-content: center;
-            padding: 40px 20px;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 0 20px;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
@@ -43,15 +47,17 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
             overflow: hidden;
             border: 1px solid rgba(0, 0, 0, 0.02);
+            margin-bottom: 20px;
         }
 
+        /* 左侧苹果侧边栏 */
         .sidebar {
             width: 280px;
             border-right: 1px solid var(--border-light);
             padding: 36px 24px;
             display: flex;
             flex-direction: column;
-            background: #fafafa;
+            background: #fafafc;
             flex-shrink: 0;
         }
 
@@ -60,6 +66,7 @@
             font-weight: 700;
             color: var(--apple-dark);
             margin-bottom: 40px;
+            letter-spacing: -0.5px;
         }
 
         .brand span {
@@ -82,7 +89,7 @@
             border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
-            transition: all 0.25s;
+            transition: all 0.25s ease;
         }
 
         .nav-item:hover {
@@ -109,11 +116,12 @@
             background: #333336 !important;
         }
 
+        /* 右侧正文区 */
         .content {
             flex-grow: 1;
             padding: 48px;
             overflow-y: auto;
-            background: #ffffff;
+            background: var(--card-bg);
         }
 
         h1 {
@@ -121,6 +129,7 @@
             color: var(--apple-dark);
             margin-bottom: 6px;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
@@ -137,7 +146,7 @@
         }
 
         .input-area-group {
-            margin-bottom: 24px;
+            margin-bottom: 4px;
         }
 
         .input-label {
@@ -151,12 +160,20 @@
         .input-box-wrapper select {
             width: 100%;
             padding: 14px 16px;
-            border: 1px solid #d2d2d7;
+            border: 1px solid var(--input-border);
             border-radius: 12px;
             font-size: 14px;
             outline: none;
-            background: #fbfbfd;
+            background: var(--input-bg);
             color: var(--apple-dark);
+            transition: all 0.2s ease;
+        }
+
+        .input-box-wrapper input:focus,
+        .input-box-wrapper select:focus {
+            border-color: var(--apple-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
 
         .action-submit-btn {
@@ -170,7 +187,8 @@
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            margin-top: 8px;
         }
 
         .action-submit-btn:hover {
@@ -180,22 +198,77 @@
         .result-display-panel {
             margin-top: 24px;
             padding: 20px;
-            background-color: #f5f5f7;
-            border: 1px dashed #d2d2d7;
+            background-color: var(--bg-main);
+            border: 1px dashed var(--input-border);
             border-radius: 12px;
             font-size: 14px;
-            color: var(--text-muted);
+            color: var(--text-main);
+            text-align: left;
         }
 
-        .ads-container {
-            margin-top: 40px;
-            padding: 20px;
-            background: #fbfbfd;
+        /* 统一卡片与提示样式 */
+        .info-section {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-section h3 {
+            font-size: 15px;
+            color: var(--apple-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
             border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+        }
+
+        /* 广告预留位样式 */
+        .ads-container {
+            margin-top: 32px;
+            padding: 16px;
+            background: var(--input-bg);
+            border: 1px dashed var(--input-border);
             border-radius: 12px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
+        }
+
+        /* 统一标准页脚样式 */
+        footer {
+            text-align: center;
+            padding: 24px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            width: 100%;
+            max-width: 1240px;
+            border-top: 1px solid var(--border-light);
+            margin-bottom: 20px;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        footer .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer .footer-links a:hover {
+            color: var(--apple-blue);
         }
     </style>
 </head>
@@ -247,35 +320,60 @@
             </div>
 
             <button class="action-submit-btn" onclick="calculateFpvPhysics()">启动多维数据推演</button>
-            <div class="result-display-panel" id="fpv-result" style="text-align:left; justify-content:flex-start;">
-                点击按钮启动多维参数物理推演...</div>
+            <div class="result-display-panel" id="fpv-result">
+                点击上方按钮启动多维参数物理推演...
+            </div>
+
+            <!-- 工具使用说明区块 -->
+            <div class="info-section">
+                <h3>📖 FPV 计算器使用指南</h3>
+                <div class="info-card">
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;">
+                        1. <b>参数输入：</b>依据您实际选用的锂电池节数、起飞总重（含图传、接收机及运动相机）、单电机最大拉力和电池容量完整填写。
+                    </p>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                        2. <b>数值参考：</b>系统将实时输出整机推重比。通常暴力花飞建议推重比保持在 6:1 以上，以保障足够的操纵响应。
+                    </p>
+                </div>
+            </div>
 
             <!-- 科普说明区块 -->
-            <div
-                style="border-top: 1px dashed var(--border-light); padding-top: 24px; text-align: left; margin-top: 32px;">
-                <h3 style="font-size: 15px; color: var(--apple-dark); margin-bottom: 12px; font-weight: 600;">💡 FPV
-                    无人机空气动力学与电学公式科普</h3>
-                <div
-                    style="font-size: 13px; color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
-                    <div
-                        style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 推重比
-                            (Thrust-to-Weight Ratio) 与特技飞行</strong>
-                        推重比公式为 TWR = 总推力 / 总重量。在 FPV 花飞中，标准的 6S 动力通常能带来高达 6:1 甚至 8:1 以上的暴力推重比，为高空甩尾或极限拉起提供充足的惯性支撑。
+            <div class="info-section" style="margin-top: 24px;">
+                <h3>💡 FPV 无人机空气动力学与电学公式科普</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="info-card">
+                        <strong
+                            style="color: var(--apple-blue); display: block; margin-bottom: 4px; font-size: 13px;">1.
+                            推重比 (Thrust-to-Weight Ratio) 与特技飞行</strong>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">推重比公式为 TWR = 总推力 / 总重量。在
+                            FPV 花飞中，标准的 6S 动力通常能带来高达 6:1 甚至 8:1 以上的暴力推重比，为高空甩尾或极限拉起提供充足的惯性支撑。</p>
                     </div>
-                    <div
-                        style="background: #fbfbfd; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2.
+                    <div class="info-card">
+                        <strong
+                            style="color: var(--apple-blue); display: block; margin-bottom: 4px; font-size: 13px;">2.
                             悬停电流与理论续航推演</strong>
-                        理论悬停时间基于欧姆定律及电量守恒转换。本工具采用空气动力学经验公式，精准预测全机在全载重下的悬停基准耗竭曲线。
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                            理论悬停时间基于欧姆定律及电量守恒转换。本工具采用空气动力学经验公式，精准预测全机在全载重下的悬停基准耗竭曲线。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 广告容器 -->
-            <div class="ads-container"><span>☕ GEEK6S 极客盒子 - 广告位预留</span></div>
+            <!-- Google Ads 广告预留位 -->
+            <div class="ads-container">
+                <span>[ 广告位招商 / Google AdSense 智能投放区域 ]</span>
+            </div>
         </div>
     </div>
+
+    <!-- 统一标准页脚 -->
+    <footer>
+        <div class="footer-links">
+            <a href="privacy.html">隐私政策</a>
+            <span>•</span>
+            <a href="feedback.html">关于我们与反馈</a>
+        </div>
+        © 2026 GEEK6S BOX. All Rights Reserved.
+    </footer>
 
     <script>
         function calculateFpvPhysics() {

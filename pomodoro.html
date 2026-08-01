@@ -4,78 +4,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>沉浸番茄钟 - GEEK6S BOX</title>
-    <link rel="stylesheet" href="style.css">
+    <title>⏱️ 沉浸番茄钟 - GEEK6S BOX</title>
+    <!-- 引入 Tailwind CSS 样式库以完美呈现苹果风排版 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5158841818618377"
+        crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-dark: #1d1d1f;
+            --text-main: #333336;
+            --text-muted: #86868b;
+            --bg-main: #f5f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.06);
+            --input-bg: #fbfbfd;
+            --input-border: #d2d2d7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1240px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        /* 侧边栏样式 - 苹果风微调 */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-light);
+            padding: 36px 24px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafc;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--apple-dark);
+            margin-bottom: 40px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand span {
+            color: #34c759;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: var(--apple-dark);
+        }
+
+        .nav-item.active {
+            background-color: var(--apple-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+        }
+
+        .btn-simulator {
+            margin-top: 16px;
+            background: var(--apple-dark);
+            color: white !important;
+            justify-content: center;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn-simulator:hover {
+            background: #333336 !important;
+        }
+
+        /* 主内容区样式 */
+        .content {
+            flex-grow: 1;
+            padding: 48px;
+            overflow-y: auto;
+            background: var(--card-bg);
+        }
+
+        h1 {
+            font-size: 26px;
+            color: var(--apple-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        /* 番茄钟面板卡片 */
+        .pomodoro-card {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            text-align: center;
+        }
+
+        /* 统一卡片与信息区块 */
+        .info-card-box {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-card-box h3 {
+            font-size: 15px;
+            color: var(--apple-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card-item {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 广告容器 */
+        .ads-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* 统一标准页脚 */
+        footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--apple-blue);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                border-radius: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+                padding: 24px 20px;
+            }
+
+            .brand {
+                margin-bottom: 16px;
+                text-align: center;
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 13px;
+                flex-grow: 1;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .content {
+                padding: 24px 20px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-[#0f1117] text-gray-100 min-h-screen flex">
+<body>
 
-    <!-- 左侧导航栏 -->
-    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex">
-        <div>
-            <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
-                ⚡ GEEK6S BOX
+    <div class="container">
+        <!-- 左侧苹果风格导航栏 -->
+        <div class="sidebar">
+            <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-item">🔗 链接工具</a>
+                <a href="pomodoro.html" class="nav-item active">⏱️ 沉浸番茄钟</a>
+                <a href="password.html" class="nav-item">🔐 强密码</a>
+                <a href="fpv.html" class="nav-item">🔋 FPV计算器</a>
+                <a href="json.html" class="nav-item">📦 JSON 格式化</a>
+                <a href="feedback.html" class="nav-item">💬 互动留言板</a>
+                <a href="simulator.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
             </div>
-            <nav class="space-y-2">
-                <a href="index.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
-                    链接工具</a>
-                <a href="pomodoro.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">⏱️
-                    沉浸番茄钟</a>
-                <a href="password.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
-                    强密码</a>
-                <a href="fpv.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
-                    FPV计算器</a>
-                <a href="json.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">📦
-                    JSON 格式化</a>
-                <a href="feedback.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
-                    互动留言板</a>
-            </nav>
         </div>
-    </aside>
 
-    <!-- 右侧主内容区 -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col items-center justify-center">
-        <div
-            class="max-w-md w-full bg-[#18181b] border border-gray-800 rounded-2xl p-8 shadow-2xl text-center space-y-8">
-            <header>
-                <h1 class="text-2xl font-bold">沉浸番茄钟</h1>
-                <p class="text-sm text-gray-400 mt-1">保持专注，享受高效的自己。</p>
+        <!-- 右侧主内容区 -->
+        <main class="content">
+            <header class="mb-6">
+                <h1>沉浸番茄钟</h1>
+                <p class="subtitle">保持深度专注，科学管理时间，享受高效的自己。</p>
             </header>
 
-            <!-- 模式切换 -->
-            <div class="flex justify-center gap-2 bg-[#0f1117] p-1.5 rounded-xl border border-gray-800">
-                <button onclick="switchMode('work')" id="btn-work"
-                    class="flex-1 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white transition">专注
-                    (25m)</button>
-                <button onclick="switchMode('break')" id="btn-break"
-                    class="flex-1 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white transition">休息
-                    (5m)</button>
+            <div class="pomodoro-card space-y-6">
+                <!-- 模式切换 -->
+                <div class="flex justify-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-inner">
+                    <button onclick="switchMode('work')" id="btn-work"
+                        class="flex-1 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white transition shadow-sm">专注
+                        (25m)</button>
+                    <button onclick="switchMode('break')" id="btn-break"
+                        class="flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition">休息
+                        (5m)</button>
+                </div>
+
+                <!-- 倒计时显示 -->
+                <div id="timer-display" class="text-6xl font-mono font-bold tracking-wider text-blue-600 py-4">
+                    25:00
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="flex gap-3">
+                    <button id="start-btn" onclick="toggleTimer()"
+                        class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl transition text-white shadow-md shadow-blue-600/20">开始专注</button>
+                    <button onclick="resetTimer()"
+                        class="px-6 py-3.5 bg-white hover:bg-gray-100 font-semibold rounded-xl transition text-gray-700 border border-gray-200">重置</button>
+                </div>
             </div>
 
-            <!-- 倒计时显示 -->
-            <div id="timer-display" class="text-6xl font-mono font-bold tracking-wider text-blue-400 py-4">
-                25:00
+            <!-- 使用说明区块 -->
+            <div class="info-card-box">
+                <h3>📖 番茄钟使用指南</h3>
+                <div class="info-card-item">
+                    <b>1. 专注阶段：</b>点击“开始专注”，进入 25 分钟的高效工作或学习状态，期间请尽量避免外界干扰。<br>
+                    <b>2. 休息放松：</b>倒计时结束后系统会提示休息 5 分钟，让大脑得到充分放松，迎接下一轮挑战。
+                </div>
             </div>
 
-            <!-- 控制按钮 -->
-            <div class="flex gap-4">
-                <button id="start-btn" onclick="toggleTimer()"
-                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-500 font-medium rounded-xl transition text-white shadow-lg shadow-blue-600/30">开始专注</button>
-                <button onclick="resetTimer()"
-                    class="px-6 py-3 bg-gray-800 hover:bg-gray-700 font-medium rounded-xl transition text-gray-300">重置</button>
+            <!-- 科学科普内容区块 -->
+            <div class="info-card-box" style="margin-top: 24px; border-top: 1px dashed var(--border-light);">
+                <h3>💡 番茄工作法（Pomodoro Technique）科普</h3>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 什么是番茄工作法？</strong>
+                    番茄工作法是由弗朗西斯科·西里洛于 1980 年代创立的一种时间管理方法。它通过将工作时间分割为以 25 分钟为单位的“番茄时间”和短休息，帮助人们克服拖延症。
+                </div>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2. 为什么它如此高效？</strong>
+                    短时间的高强度专注配合规律的间歇休息，能够有效维持大脑皮层的兴奋度，避免因长期连续工作导致的效率低下和思维疲劳。
+                </div>
             </div>
-        </div>
-    </main>
 
-    <!-- 引入全局搜索脚本 -->
-    <script src="search.js"></script>
+            <!-- Google Ads 广告预留位 -->
+            <div class="ads-container">
+                <span>☕ GEEK6S 极客盒子 - Google Ads 智能广告位预留区</span>
+            </div>
+
+            <!-- 统一标准页脚 -->
+            <footer>
+                <div
+                    style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="privacy.html">隐私政策</a>
+                    <span>•</span>
+                    <a href="feedback.html">关于我们与反馈</a>
+                </div>
+                © 2026 GEEK6S BOX. All Rights Reserved.
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript 逻辑控制块 -->
     <script>
         let totalSeconds = 25 * 60;
         let timer = null;
@@ -98,11 +367,11 @@
                 clearInterval(timer);
                 isRunning = false;
                 startBtn.innerText = '继续';
-                startBtn.className = "flex-1 py-3 bg-blue-600 hover:bg-blue-500 font-medium rounded-xl transition text-white shadow-lg shadow-blue-600/30";
+                startBtn.className = "flex-1 py-3.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl transition text-white shadow-md shadow-blue-600/20";
             } else {
                 isRunning = true;
                 startBtn.innerText = '暂停';
-                startBtn.className = "flex-1 py-3 bg-yellow-600 hover:bg-yellow-500 font-medium rounded-xl transition text-white shadow-lg shadow-yellow-600/30";
+                startBtn.className = "flex-1 py-3.5 bg-amber-500 hover:bg-amber-400 font-semibold rounded-xl transition text-white shadow-md shadow-amber-500/20";
                 timer = setInterval(() => {
                     if (totalSeconds > 0) {
                         totalSeconds--;
@@ -112,6 +381,7 @@
                         isRunning = false;
                         alert(currentMode === 'work' ? '专注时间到，休息一下吧！' : '休息结束，开始新一轮专注！');
                         startBtn.innerText = '开始专注';
+                        startBtn.className = "flex-1 py-3.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl transition text-white shadow-md shadow-blue-600/20";
                     }
                 }, 1000);
             }
@@ -123,7 +393,7 @@
             totalSeconds = currentMode === 'work' ? 25 * 60 : 5 * 60;
             updateDisplay();
             startBtn.innerText = '开始专注';
-            startBtn.className = "flex-1 py-3 bg-blue-600 hover:bg-blue-500 font-medium rounded-xl transition text-white shadow-lg shadow-blue-600/30";
+            startBtn.className = "flex-1 py-3.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl transition text-white shadow-md shadow-blue-600/20";
         }
 
         function switchMode(mode) {
@@ -131,20 +401,21 @@
             isRunning = false;
             currentMode = mode;
             startBtn.innerText = '开始专注';
-            startBtn.className = "flex-1 py-3 bg-blue-600 hover:bg-blue-500 font-medium rounded-xl transition text-white shadow-lg shadow-blue-600/30";
+            startBtn.className = "flex-1 py-3.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl transition text-white shadow-md shadow-blue-600/20";
 
             if (mode === 'work') {
                 totalSeconds = 25 * 60;
-                btnWork.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white transition";
-                btnBreak.className = "flex-1 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white transition";
+                btnWork.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white transition shadow-sm";
+                btnBreak.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
             } else {
                 totalSeconds = 5 * 60;
-                btnBreak.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white transition";
-                btnWork.className = "flex-1 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white transition";
+                btnBreak.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white transition shadow-sm";
+                btnWork.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-900 transition";
             }
             updateDisplay();
         }
     </script>
+    <script src="search.js"></script>
 </body>
 
 </html>

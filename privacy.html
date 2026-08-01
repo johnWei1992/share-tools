@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>隐私政策 - GEEK6S BOX</title>
-    <!-- 引入 Tailwind CSS 样式 -->
+    <title>🔒 隐私政策 - GEEK6S BOX</title>
+    <!-- 引入 Tailwind CSS 样式库以完美呈现苹果风排版 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5158841818618377"
+        crossorigin="anonymous"></script>
     <style>
         :root {
             --apple-blue: #0071e3;
@@ -17,9 +19,14 @@
             --bg-main: #f5f5f7;
             --card-bg: #ffffff;
             --border-light: rgba(0, 0, 0, 0.06);
+            --input-bg: #fbfbfd;
+            --input-border: #d2d2d7;
         }
 
         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
@@ -33,6 +40,7 @@
             justify-content: space-between;
         }
 
+        /* 苹果风毛玻璃顶部导航 */
         .apple-nav {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
@@ -61,6 +69,65 @@
             opacity: 0.75;
             text-decoration: underline;
         }
+
+        /* 统一卡片与信息区块 */
+        .info-card-box {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-card-box h3 {
+            font-size: 15px;
+            color: var(--apple-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card-item {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 广告容器 */
+        .ads-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* 统一标准页脚 */
+        footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: #fafafc;
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--apple-blue);
+        }
     </style>
 </head>
 
@@ -68,10 +135,12 @@
 
     <!-- 顶部苹果风毛玻璃导航栏 -->
     <header class="apple-nav py-4 px-8 flex justify-between items-center">
-        <a href="index.html" class="text-base font-bold tracking-tight text-[var(--apple-dark)]">⚡ GEEK<span>6S</span>
-            BOX</a>
         <a href="index.html"
-            class="text-xs text-[var(--text-muted)] hover:text-[var(--apple-blue)] font-medium transition-colors">←
+            class="text-base font-bold tracking-tight text-[var(--apple-dark)] flex items-center gap-1.5">
+            🛸 GEEK<span style="color: #34c759;">6S</span> BOX
+        </a>
+        <a href="index.html"
+            class="text-xs text-[var(--text-muted)] hover:text-[var(--apple-blue)] font-semibold transition-colors">←
             返回极客工具箱</a>
     </header>
 
@@ -121,6 +190,35 @@
                     </p>
                 </section>
 
+                <!-- 使用说明模块 -->
+                <div class="info-card-box">
+                    <h3>📖 隐私条款使用与阅读提示</h3>
+                    <div class="info-card-item">
+                        <b>1. 彻底透明：</b>本站始终秉持“零数据收集”原则，绝不存储用户的隐私密码与输入记录。<br>
+                        <b>2. 广告管理：</b>您可以随时通过 Google 的官方广告偏好面板自主控制个性化广告的展示。
+                    </div>
+                </div>
+
+                <!-- 技术与合规科普模块 -->
+                <div class="info-card-box" style="margin-top: 24px; border-top: 1px dashed var(--border-light);">
+                    <h3>💡 网页隐私与网络合规科普</h3>
+                    <div class="info-card-item">
+                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1.
+                            什么是客户端本地计算（Client-Side Processing）？</strong>
+                        客户端计算意味着所有逻辑运算完全在您的浏览器内部执行。与传统云端服务器交互不同，这种方式天然屏蔽了中间传输的隐私泄露风险。
+                    </div>
+                    <div class="info-card-item">
+                        <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2. Cookie
+                            与数字隐私保护</strong>
+                        Cookie 是存储在终端设备上的小型文本文件。现代网络隐私协议（如 GDPR 与 CCPA）要求网站必须向用户明示第三方广告跟踪机制，保障用户的知情权与选择权。
+                    </div>
+                </div>
+
+                <!-- Google Ads 广告预留位 -->
+                <div class="ads-container">
+                    <span>☕ GEEK6S 极客盒子 - Google Ads 智能广告位预留区</span>
+                </div>
+
                 <div
                     class="pt-6 border-t border-[var(--border-light)] text-xs text-[var(--text-muted)] text-right font-medium">
                     最近更新日期：2026年7月
@@ -130,11 +228,17 @@
         </article>
     </main>
 
-    <!-- 页脚 -->
-    <footer
-        class="text-center py-8 text-xs text-[var(--text-muted)] border-t border-[var(--border-light)] mt-12 bg-white/50">
+    <!-- 统一标准页脚 -->
+    <footer>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+            <a href="privacy.html">隐私政策</a>
+            <span>•</span>
+            <a href="feedback.html">关于我们与反馈</a>
+        </div>
         © 2026 GEEK6S BOX. All Rights Reserved.
     </footer>
+
+    <!-- 全局搜索脚本 -->
     <script src="search.js"></script>
 
 </body>

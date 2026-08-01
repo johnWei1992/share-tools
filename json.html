@@ -4,73 +4,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON 格式化工具 - GEEK6S BOX</title>
-    <link rel="stylesheet" href="style.css">
+    <title>📦 JSON 格式化工具 - GEEK6S BOX</title>
+    <!-- 引入 Tailwind CSS 样式库以完美呈现苹果风排版 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5158841818618377"
+        crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-dark: #1d1d1f;
+            --text-main: #333336;
+            --text-muted: #86868b;
+            --bg-main: #f5f5f7;
+            --card-bg: #ffffff;
+            --border-light: rgba(0, 0, 0, 0.06);
+            --input-bg: #fbfbfd;
+            --input-border: #d2d2d7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1240px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        /* 侧边栏样式 - 苹果风微调 */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-light);
+            padding: 36px 24px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafc;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--apple-dark);
+            margin-bottom: 40px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand span {
+            color: #34c759;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: var(--apple-dark);
+        }
+
+        .nav-item.active {
+            background-color: var(--apple-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+        }
+
+        .btn-simulator {
+            margin-top: 16px;
+            background: var(--apple-dark);
+            color: white !important;
+            justify-content: center;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn-simulator:hover {
+            background: #333336 !important;
+        }
+
+        /* 主内容区样式 */
+        .content {
+            flex-grow: 1;
+            padding: 48px;
+            overflow-y: auto;
+            background: var(--card-bg);
+        }
+
+        h1 {
+            font-size: 26px;
+            color: var(--apple-dark);
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        /* 按钮样式微调 */
+        .btn-action-primary {
+            background-color: var(--apple-blue);
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+        }
+
+        .btn-action-primary:hover {
+            background-color: var(--apple-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-action-secondary {
+            background-color: #f5f5f7;
+            color: var(--apple-dark);
+            border: 1px solid var(--input-border);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-secondary:hover {
+            background-color: #ebebec;
+        }
+
+        .btn-action-danger {
+            background-color: #fff1f2;
+            color: #e02424;
+            border: 1px solid #fecaca;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-danger:hover {
+            background-color: #ffe4e6;
+        }
+
+        /* 编辑器文本框 */
+        #json-input {
+            width: 100%;
+            height: 380px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            color: var(--apple-dark);
+            outline: none;
+            resize: vertical;
+            transition: all 0.2s ease;
+            line-height: 1.5;
+        }
+
+        #json-input:focus {
+            border-color: var(--apple-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+        }
+
+        /* 统一卡片与信息区块 */
+        .info-card-box {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+            text-align: left;
+        }
+
+        .info-card-box h3 {
+            font-size: 15px;
+            color: var(--apple-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card-item {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 广告容器 */
+        .ads-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* 统一标准页脚 */
+        footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--apple-blue);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                border-radius: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-light);
+                padding: 24px 20px;
+            }
+
+            .brand {
+                margin-bottom: 16px;
+                text-align: center;
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 13px;
+                flex-grow: 1;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .content {
+                padding: 24px 20px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-[#0f1117] text-gray-100 min-h-screen flex">
+<body>
 
-    <!-- 左侧导航栏 -->
-    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex">
-        <div>
-            <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
-                ⚡ GEEK6S BOX
+    <div class="container">
+        <!-- 左侧苹果风格导航栏 -->
+        <div class="sidebar">
+            <div class="brand">🛸 GEEK<span>6S</span> BOX</div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-item">🔗 链接工具</a>
+                <a href="pomodoro.html" class="nav-item">⏱️ 沉浸番茄钟</a>
+                <a href="password.html" class="nav-item">🔐 强密码</a>
+                <a href="fpv.html" class="nav-item">🔋 FPV计算器</a>
+                <a href="json.html" class="nav-item active">📦 JSON 格式化</a>
+                <a href="feedback.html" class="nav-item">💬 互动留言板</a>
+                <a href="simulator.html" class="nav-item btn-simulator" target="_blank">🎮 极速模拟器</a>
             </div>
-            <nav class="space-y-2">
-                <a href="index.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
-                    链接工具</a>
-                <a href="pomodoro.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
-                    沉浸番茄钟</a>
-                <a href="password.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
-                    强密码</a>
-                <a href="fpv.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
-                    FPV计算器</a>
-                <a href="json.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">📦
-                    JSON 格式化</a>
-                <a href="feedback.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
-                    互动留言板</a>
-                <a href="simulator.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-800 text-white font-semibold justify-center text-center mt-4 transition hover:bg-gray-700"
-                    target="_blank">🎮 极速模拟器</a>
-            </nav>
-        </div>
-    </aside>
-
-    <!-- 右侧主内容区 -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col h-screen">
-        <header class="mb-6">
-            <h1 class="text-2xl font-bold">JSON 格式化与语法校验</h1>
-            <p class="text-sm text-gray-400 mt-1">在线解析、格式化美化及压缩 JSON 数据。</p>
-        </header>
-
-        <!-- 操作按钮栏 -->
-        <div class="flex gap-3 mb-4">
-            <button onclick="formatJSON(2)"
-                class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-sm font-medium rounded-lg transition text-white">格式化
-                (2空格)</button>
-            <button onclick="compressJSON()"
-                class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-sm font-medium rounded-lg transition text-gray-300">压缩
-                / 去空格</button>
-            <button onclick="clearJSON()"
-                class="px-4 py-2 bg-red-900/40 hover:bg-red-900/60 text-sm font-medium rounded-lg transition text-red-300">清空</button>
-            <span id="status-tip" class="self-center text-xs text-gray-400 ml-auto"></span>
         </div>
 
-        <!-- 编辑器区域 -->
-        <div class="flex-1 pb-10">
-            <textarea id="json-input" placeholder="在此粘贴您的 JSON 字符串..."
-                class="w-full h-full bg-[#18181b] border border-gray-800 rounded-xl p-4 text-mono text-sm text-gray-200 outline-none resize-none focus:border-blue-600 transition font-mono"></textarea>
-        </div>
-    </main>
+        <!-- 右侧主内容区 -->
+        <main class="content">
+            <header class="mb-6">
+                <h1>JSON 格式化与语法校验</h1>
+                <p class="subtitle">在线解析、格式化美化及压缩 JSON 数据，确保数据格式无误。</p>
+            </header>
 
-    <!-- 引入全局搜索脚本 -->
+            <!-- 操作按钮栏 -->
+            <div class="flex flex-wrap gap-3 mb-4 items-center">
+                <button onclick="formatJSON(2)"
+                    class="px-4 py-2.5 btn-action-primary text-sm font-semibold rounded-xl">格式化 (2空格)</button>
+                <button onclick="compressJSON()"
+                    class="px-4 py-2.5 btn-action-secondary text-sm font-medium rounded-xl">压缩 / 去空格</button>
+                <button onclick="clearJSON()"
+                    class="px-4 py-2.5 btn-action-danger text-sm font-medium rounded-xl">清空</button>
+                <span id="status-tip" class="self-center text-xs ml-auto font-medium"></span>
+            </div>
+
+            <!-- 编辑器区域 -->
+            <div class="w-full">
+                <textarea id="json-input" placeholder="在此粘贴您的 JSON 字符串..."></textarea>
+            </div>
+
+            <!-- 使用说明区块 -->
+            <div class="info-card-box">
+                <h3>📖 JSON 工具使用指南</h3>
+                <div class="info-card-item">
+                    <b>1. 快速美化：</b>粘贴杂乱无章的单行或混淆 JSON 字符串后，点击“格式化”即可自动按层级缩进排版。<br>
+                    <b>2. 错误捕获：</b>若 JSON 语法有误（如多余的逗号、缺少双引号），工具会自动提示具体错误原因。
+                </div>
+            </div>
+
+            <!-- 技术科普内容区块 -->
+            <div class="info-card-box" style="margin-top: 24px; border-top: 1px dashed var(--border-light);">
+                <h3>💡 JSON 数据格式与规范科普</h3>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">1. 什么是 JSON？</strong>
+                    JSON（JavaScript Object Notation）是一种轻量级的数据交换格式。它基于 JavaScript 语法子集，完全独立于语言，是现代 Web 开发与 API 接口传输的核心标准。
+                </div>
+                <div class="info-card-item">
+                    <strong style="color: var(--apple-blue); display: block; margin-bottom: 4px;">2. 常见语法陷阱</strong>
+                    标准的 JSON 要求所有键名（Key）必须使用<b>双引号</b>包裹，且末尾元素不能有多余的逗号（Trailing Comma），否则将导致解析失败。
+                </div>
+            </div>
+
+            <!-- Google Ads 广告预留位 -->
+            <div class="ads-container">
+                <span>☕ GEEK6S 极客盒子 - Google Ads 智能广告位预留区</span>
+            </div>
+
+            <!-- 统一标准页脚 -->
+            <footer>
+                <div
+                    style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 8px;">
+                    <a href="privacy.html">隐私政策</a>
+                    <span>•</span>
+                    <a href="feedback.html">关于我们与反馈</a>
+                </div>
+                © 2026 GEEK6S BOX. All Rights Reserved.
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript 逻辑控制块 -->
     <script>
         const inputArea = document.getElementById('json-input');
         const statusTip = document.getElementById('status-tip');
@@ -78,28 +389,36 @@
         function formatJSON(indent) {
             try {
                 const val = inputArea.value.trim();
-                if (!val) return;
+                if (!val) {
+                    statusTip.innerText = "⚠️ 请先输入需要格式化的内容";
+                    statusTip.className = "self-center text-xs ml-auto font-medium text-amber-500";
+                    return;
+                }
                 const jsonObj = JSON.parse(val);
                 inputArea.value = JSON.stringify(jsonObj, null, indent);
                 statusTip.innerText = "✅ JSON 格式化成功";
-                statusTip.className = "self-center text-xs text-green-400 ml-auto";
+                statusTip.className = "self-center text-xs ml-auto font-medium text-green-600";
             } catch (e) {
                 statusTip.innerText = "❌ JSON 语法错误: " + e.message;
-                statusTip.className = "self-center text-xs text-red-400 ml-auto";
+                statusTip.className = "self-center text-xs ml-auto font-medium text-red-500";
             }
         }
 
         function compressJSON() {
             try {
                 const val = inputArea.value.trim();
-                if (!val) return;
+                if (!val) {
+                    statusTip.innerText = "⚠️ 请先输入需要压缩的内容";
+                    statusTip.className = "self-center text-xs ml-auto font-medium text-amber-500";
+                    return;
+                }
                 const jsonObj = JSON.parse(val);
                 inputArea.value = JSON.stringify(jsonObj);
                 statusTip.innerText = "✅ JSON 压缩成功";
-                statusTip.className = "self-center text-xs text-green-400 ml-auto";
+                statusTip.className = "self-center text-xs ml-auto font-medium text-green-600";
             } catch (e) {
                 statusTip.innerText = "❌ JSON 语法错误: " + e.message;
-                statusTip.className = "self-center text-xs text-red-400 ml-auto";
+                statusTip.className = "self-center text-xs ml-auto font-medium text-red-500";
             }
         }
 

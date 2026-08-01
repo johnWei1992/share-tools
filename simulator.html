@@ -4,71 +4,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极速模拟器 - GEEK6S BOX</title>
+    <title>FPV 极速穿梭模拟器 - GEEK6S BOX</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Three.js 用于 3D 渲染 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #canvas-container {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid #27272a;
+            background: #000;
+        }
+    </style>
 </head>
 
-<body class="bg-[#0f1117] text-gray-100 min-h-screen flex">
+<body class="bg-[#0f1117] text-gray-100 min-h-screen flex flex-col justify-between">
 
-    <!-- 左侧导航栏 -->
-    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex">
-        <div>
-            <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
-                ⚡ GEEK6S BOX
+    <!-- 顶部或整体容器布局 -->
+    <div class="flex flex-1">
+        <!-- 左侧导航栏 -->
+        <aside class="w-64 border-r border-gray-800 p-6 flex flex-col justify-between hidden md:flex shrink-0">
+            <div>
+                <div class="text-xl font-bold tracking-wider mb-8 text-white flex items-center gap-2">
+                    ⚡ GEEK6S BOX
+                </div>
+                <nav class="space-y-2">
+                    <a href="index.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
+                        链接工具</a>
+                    <a href="pomodoro.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
+                        沉浸番茄钟</a>
+                    <a href="password.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
+                        强密码</a>
+                    <a href="fpv.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
+                        FPV计算器</a>
+                    <a href="json.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">📦
+                        JSON 格式化</a>
+                    <a href="feedback.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
+                        互动留言板</a>
+                    <a href="simulator.html"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">🎮
+                        极速模拟器</a>
+                </nav>
             </div>
-            <nav class="space-y-2">
-                <a href="index.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔗
-                    链接工具</a>
-                <a href="pomodoro.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">⏱️
-                    沉浸番茄钟</a>
-                <a href="password.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔐
-                    强密码</a>
-                <a href="fpv.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">🔋
-                    FPV计算器</a>
-                <a href="json.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">📦
-                    JSON 格式化</a>
-                <a href="feedback.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">💬
-                    互动留言板</a>
-                <a href="simulator.html"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium shadow-lg shadow-blue-600/30">🎮
-                    极速模拟器</a>
-            </nav>
-        </div>
-    </aside>
+        </aside>
 
-    <!-- 右侧主内容区 -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col h-screen">
-        <header class="mb-6">
-            <h1 class="text-2xl font-bold">极速在线模拟器</h1>
-            <p class="text-sm text-gray-400 mt-1">高性能本地沙盒与硬件/物理效果模拟环境。</p>
-        </header>
+        <!-- 右侧主内容与功能说明区 -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col">
+            <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold">FPV 极速空间穿梭模拟器</h1>
+                    <p class="text-sm text-gray-400 mt-1">沉浸式 3D 第一人称视角物理穿梭与高速避障环境。</p>
+                </div>
+                <div id="hud-score"
+                    class="text-sm font-mono bg-[#18181b] border border-gray-800 px-4 py-2 rounded-lg text-blue-400 font-bold">
+                    得分: 0 | 速度: 0 km/h
+                </div>
+            </header>
 
-        <!-- 模拟器主体容器 -->
-        <div
-            class="flex-1 bg-[#18181b] border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center text-center shadow-xl space-y-4">
-            <div class="text-5xl">🚀</div>
-            <h2 class="text-xl font-semibold text-white">模拟器环境准备就绪</h2>
-            <p class="text-sm text-gray-400 max-w-md">
-                当前沙盒运行正常。您可以在此集成各类 WebGL 物理引擎、电路模拟或复古游戏机核心。
-            </p>
-            <div class="pt-4">
-                <button onclick="alert('模拟器内核已启动！')"
-                    class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 font-medium rounded-lg transition text-white shadow-lg shadow-blue-600/20">
-                    初始化核心引擎
-                </button>
+            <!-- 3D 渲染容器 -->
+            <div id="canvas-container" class="mb-10 shadow-2xl">
+                <!-- 游戏开始遮罩 -->
+                <div id="start-overlay"
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,17,23,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10;">
+                    <h2 class="text-2xl font-bold mb-3 text-white">准备好进入 FPV 空间了吗？</h2>
+                    <p class="text-xs text-gray-400 mb-6 max-w-sm text-center px-4">使用 W/S 升降、A/D
+                        转向，避开随机出现的空间障碍物，体验极速飞行！</p>
+                    <button onclick="startGame()"
+                        class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-xl transition shadow-lg shadow-blue-600/30">
+                        启动引擎，开始飞行
+                    </button>
+                </div>
             </div>
+
+            <!-- 功能详细说明与介绍区块（恢复内容） -->
+            <section class="bg-[#18181b] border border-gray-800 rounded-2xl p-6 md:p-8 space-y-6 mb-12">
+                <h2 class="text-lg font-bold text-white border-b border-gray-800 pb-3">🎮 关于极速 FPV 模拟器与功能介绍</h2>
+                <div class="text-sm text-gray-400 space-y-3 leading-relaxed">
+                    <p>本工具基于现代 WebGL (Three.js)
+                        引擎构建，旨在为极客与无人机爱好者提供一个轻量、免安装的浏览器端动态物理沙盒。通过精准的视角惯性计算与随机障碍物生成算法，还原了穿越机高速飞行时的紧张刺激感。</p>
+                    <p><strong>核心操作指南：</strong></p>
+                    <ul class="list-disc pl-5 space-y-1 text-gray-300">
+                        <li><strong>方向控制：</strong> 使用键盘上的 <code
+                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">A</code> / <code
+                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">D</code> 键控制飞行器左右平移及转向。</li>
+                        <li><strong>高度控制：</strong> 使用 <code
+                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">W</code> / <code
+                                class="bg-gray-800 px-1.5 py-0.5 rounded text-blue-400">S</code> 键调整飞行高度，应对高低错落的几何障碍。
+                        </li>
+                        <li><strong>动态加速：</strong> 随着生存得分的增加，飞行速度会自动阶梯式提升，挑战您的极限反应速度。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 广告招商与提示位（Google AdSense 预留位） -->
+            <div class="border border-dashed border-gray-800 rounded-xl p-4 text-center text-xs text-gray-600 mb-8">
+                <span>[ 广告位招商 / Google AdSense 智能投放区域 ]</span>
+            </div>
+        </main>
+    </div>
+
+    <!-- 统一标准页脚 -->
+    <footer class="text-center py-6 text-xs text-gray-500 border-t border-gray-800 bg-[#0f1117] mt-auto w-full">
+        <div class="flex justify-center items-center gap-4 mb-2">
+            <a href="privacy.html" class="hover:text-blue-400 transition">隐私政策</a>
+            <span>•</span>
+            <a href="feedback.html" class="hover:text-blue-400 transition">关于我们与反馈</a>
         </div>
-    </main>
+        © 2026 GEEK6S BOX. All Rights Reserved.
+    </footer>
 
     <!-- 引入全局搜索脚本 -->
     <script src="search.js"></script>
+    <script>
+        let scene, camera, renderer;
+        let obstacles = [];
+        let gameActive = false;
+        let score = 0;
+        let speed = 0.8;
+        let keys = {};
+
+        const container = document.getElementById('canvas-container');
+        const hudScore = document.getElementById('hud-score');
+        const startOverlay = document.getElementById('start-overlay');
+
+        function init3D() {
+            if (scene) return;
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0f1117, 0.015);
+
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 2, 5);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x0f1117);
+            container.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0x3b82f6, 1);
+            dirLight.position.set(0, 20, 10);
+            scene.add(dirLight);
+
+            const gridHelper = new THREE.GridHelper(500, 100, 0x3b82f6, 0x27272a);
+            gridHelper.position.y = -5;
+            scene.add(gridHelper);
+
+            const ceilingGrid = new THREE.GridHelper(500, 100, 0x3b82f6, 0x27272a);
+            ceilingGrid.position.y = 15;
+            scene.add(ceilingGrid);
+
+            window.addEventListener('keydown', (e) => keys[e.code] = true);
+            window.addEventListener('keyup', (e) => keys[e.code] = false);
+
+            window.addEventListener('resize', () => {
+                if (!container) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function spawnObstacle() {
+            const geometryTypes = [
+                new THREE.BoxGeometry(3, 3, 3),
+                new THREE.ConeGeometry(2, 4, 4),
+                new THREE.TorusGeometry(3, 0.5, 16, 100)
+            ];
+            const geo = geometryTypes[Math.floor(Math.random() * geometryTypes.length)];
+            const mat = new THREE.MeshStandardMaterial({
+                color: Math.random() > 0.5 ? 0x3b82f6 : 0x6366f1,
+                wireframe: true
+            });
+            const obstacle = new THREE.Mesh(geo, mat);
+
+            const x = (Math.random() - 0.5) * 25;
+            const y = Math.random() * 8 - 1;
+            const z = -200;
+            obstacle.position.set(x, y, z);
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+        }
+
+        function startGame() {
+            startOverlay.style.display = 'none';
+            init3D();
+            gameActive = true;
+            score = 0;
+            speed = 0.8;
+            obstacles.forEach(o => scene.remove(o));
+            obstacles = [];
+            camera.position.set(0, 2, 5);
+            animate();
+        }
+
+        function animate() {
+            if (!gameActive) return;
+
+            requestAnimationFrame(animate);
+
+            if (keys['KeyA'] || keys['ArrowLeft']) camera.position.x -= 0.3;
+            if (keys['KeyD'] || keys['ArrowRight']) camera.position.x += 0.3;
+            if (keys['KeyW'] || keys['ArrowUp']) camera.position.y += 0.2;
+            if (keys['KeyS'] || keys['ArrowDown']) camera.position.y -= 0.2;
+
+            camera.position.x = Math.max(-15, Math.min(15, camera.position.x));
+            camera.position.y = Math.max(-2, Math.min(10, camera.position.y));
+
+            if (Math.random() < 0.04) {
+                spawnObstacle();
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].position.z += speed;
+                obstacles[i].rotation.x += 0.01;
+                obstacles[i].rotation.y += 0.02;
+
+                const distance = camera.position.distanceTo(obstacles[i].position);
+                if (distance < 2.3) {
+                    gameActive = false;
+                    alert(`💥 撞击障碍物！最终得分: ${score}`);
+                    startOverlay.style.display = 'flex';
+                    return;
+                }
+
+                if (obstacles[i].position.z > 10) {
+                    scene.remove(obstacles[i]);
+                    obstacles.splice(i, 1);
+                    score += 10;
+                    speed = Math.min(2.5, speed + 0.005);
+                }
+            }
+
+            hudScore.innerText = `得分: ${score} | 速度: ${Math.round(speed * 120)} km/h`;
+            renderer.render(scene, camera);
+        }
+
+        window.onload = () => {
+            init3D();
+            renderer.render(scene, camera);
+        };
+    </script>
 </body>
 
 </html>
